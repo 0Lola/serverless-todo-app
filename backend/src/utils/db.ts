@@ -1,3 +1,4 @@
+import { UpdateTodoRequest } from './../../../client/src/types/UpdateTodoRequest';
 import { TodoItem } from './../models/TodoItem';
 import * as AWS from 'aws-sdk'
 import * as AWSXRay from 'aws-xray-sdk'
@@ -30,6 +31,48 @@ export class DB {
         }).promise()
 
         return item
+    }
+
+    async updateTodoItem(todoId:string ,item: UpdateTodoRequest): Promise<any> {
+        await this.db.update({
+            TableName: ITEMS_TABLE,
+            Key: {
+                todoId: todoId
+            },
+            UpdateExpression: "SET name = :name, dueDate = :dueDate, done = :done",
+                ConditionExpression: "todoId = :todoId",
+                ExpressionAttributeValues: {
+                    ":todoId": todoId,
+                    ":name": item.name,
+                    ":dueDate": item.dueDate,
+                    ":done": item.done,
+                },
+            ReturnValues:"UPDATED_NEW"
+        },
+        (err,res)=>{
+            if(err){
+                console.error(`updateTodo error: ${JSON.stringify(err)}`);
+                return err;
+
+            }
+            if(res){
+                console.log(`updateTodo succeeded: ${JSON.stringify(res)}`);
+                return res;
+            }
+            
+        }).promise()
+
+    }
+
+    async deleteTodoItem(todoId:string): Promise<string>{
+        await this.db.delete({
+            TableName: ITEMS_TABLE,
+            Key: {
+                todoId: todoId
+            }
+        }).promise()
+
+        return todoId
     }
 }
 
