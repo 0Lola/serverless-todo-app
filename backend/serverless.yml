@@ -75,7 +75,7 @@ resources:
   Resources:
     ItemsDynamoDBTable:
       Type: AWS::DynamoDB::Table
-      DeletionPolicy: Retain
+      # DeletionPolicy: Retain
       Properties:
         AttributeDefinitions:
           - AttributeName: todoId
