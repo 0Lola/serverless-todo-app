@@ -1,0 +1,1 @@
+{"version":3,"file":"getTodos.js","sourceRoot":"","sources":["../../../../src/lambda/http/getTodos.ts"],"names":[],"mappings":"AAAA,OAAO,6BAA6B,CAAA;AAIpC,MAAM,CAAC,MAAM,OAAO,GAA2B,KAAK,EAAE,KAA2B,EAAkC,EAAE;IACnH,8CAA8C;IAC5C,OAAO;QACH,UAAU,EAAE,GAAG;QACf,IAAI,EAAE,IAAI,CAAC,SAAS,CAAC,KAAK,CAAC;KAC9B,CAAA;AACL,CAAC,CAAA"}
