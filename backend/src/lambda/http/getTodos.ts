@@ -1,7 +1,6 @@
 import { DB } from './../../utils/db';
 import { APIGatewayProxyEvent, APIGatewayProxyResult, APIGatewayProxyHandler } from 'aws-lambda'
 import 'source-map-support/register'
-import * as AWS from 'aws-sdk'
 
 const db = new DB();
 
