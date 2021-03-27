@@ -16,7 +16,7 @@ provider:
     region: ${opt:region, 'us-east-1'}
     ITEMS_TABLE: Items
     IMAGES_TABLE: Images
-    IMAGES_BUCKET: serverless-images
+    IMAGES_BUCKET: serverless-images-zxa011023
     IMAGE_ID_INDEX: ImageIdIndex
     SIGNED_URL_EXPIRATION: 300
 
