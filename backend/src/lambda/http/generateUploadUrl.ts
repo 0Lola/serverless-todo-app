@@ -17,7 +17,7 @@ const s3 = new XAWS.S3({
 })
 
 export const handler : APIGatewayProxyHandler = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
-    const todoId = event.pathParameters.todId
+    const todoId = event.pathParameters.todoId
     console.log(`generateUploadUrl todoId : ${todoId}`)
     const valid = await db.todoIsExists(todoId)
 
