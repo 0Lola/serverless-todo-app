@@ -79,8 +79,7 @@ export class DB {
         return todoId
     }
     
-    async todoIsExists(todoId:string): Promise<TodoItem> {
-        console.log('getAllTodoItems');
+    async todoIsExists(todoId:string): Promise<boolean> {
         const result = await this.db.get({
             TableName: TODO_TABLE,
             Key: {
@@ -89,7 +88,8 @@ export class DB {
         }).promise()
 
         const item = result.Item
-        return item as TodoItem
+        console.log(`todoIsExists: ${item}`);
+        return item != null && item != undefined
     }
 
     // Image
