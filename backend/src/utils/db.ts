@@ -5,8 +5,8 @@ import * as AWSXRay from 'aws-xray-sdk'
 import { DocumentClient } from 'aws-sdk/clients/dynamodb'
 
 const XAWS = AWSXRay.captureAWS(AWS)
-const ITEMS_TABLE = process.env.ITEMS_TABLE;
-const IMAGES_TABLE = process.env.IMAGES_TABLE;
+const ITEM_TABLE = process.env.ITEM_TABLE;
+const IMAGE_TABLE = process.env.IMAGE_TABLE;
 const IMAGES_BUCKET = process.env.IMAGES_BUCKET;
 
 export class DB {
@@ -21,7 +21,7 @@ export class DB {
 
         console.log('getAllTodoItems');
         const result = await this.db.scan({
-            TableName: ITEMS_TABLE
+            TableName: ITEM_TABLE
         }).promise()
 
         const items = result.Items
@@ -30,7 +30,7 @@ export class DB {
 
     async createTodoItem(item: TodoItem): Promise<TodoItem> {
         await this.db.put({
-            TableName: ITEMS_TABLE,
+            TableName: ITEM_TABLE,
             Item: item
         }).promise()
 
@@ -39,7 +39,7 @@ export class DB {
 
     async updateTodoItem(todoId:string ,item: UpdateTodoRequest): Promise<any> {
         await this.db.update({
-            TableName: ITEMS_TABLE,
+            TableName: ITEM_TABLE,
             Key: {
                 todoId: todoId
             },
@@ -70,7 +70,7 @@ export class DB {
 
     async deleteTodoItem(todoId:string): Promise<string>{
         await this.db.delete({
-            TableName: ITEMS_TABLE,
+            TableName: ITEM_TABLE,
             Key: {
                 todoId: todoId
             }
@@ -82,7 +82,7 @@ export class DB {
     async todoIsExists(todoId:string): Promise<TodoItem> {
         console.log('getAllTodoItems');
         const result = await this.db.get({
-            TableName: ITEMS_TABLE,
+            TableName: ITEM_TABLE,
             Key: {
                 todoId: todoId
             }
@@ -109,7 +109,7 @@ export class DB {
       
         await this.db
           .put({
-            TableName: IMAGES_TABLE,
+            TableName: IMAGE_TABLE,
             Item: image
           })
           .promise()
