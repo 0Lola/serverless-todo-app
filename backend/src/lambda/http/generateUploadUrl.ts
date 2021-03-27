@@ -4,7 +4,7 @@ import * as AWS from 'aws-sdk'
 import * as uuid from 'uuid'
 import * as middy from 'middy'
 import { cors } from 'middy/middlewares'
-import { APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda'
+import { APIGatewayProxyEvent, APIGatewayProxyResult, APIGatewayProxyHandler } from 'aws-lambda'
 import { DB } from '../../utils/db'
 
 const db = new DB()
@@ -16,7 +16,7 @@ const s3 = new XAWS.S3({
     signatureVersion: 'v4'
 })
 
-export const handler = middy(async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
+export const handler : APIGatewayProxyHandler = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
     console.log(`generateUploadUrl event: ${JSON.stringify(event)}`)
     const todoId = event.pathParameters.todId
     const valid = await db.todoIsExists(todoId)
@@ -42,13 +42,8 @@ export const handler = middy(async (event: APIGatewayProxyEvent): Promise<APIGat
             uploadUrl: url
         })
     }
-})
+}
 
-handler.use(
-    cors({
-        credentials: true
-    })
-)
 
 function getUploadUrl(imageId: string) {
     return s3.getSignedUrl('putObject', {
