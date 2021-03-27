@@ -17,8 +17,8 @@ const s3 = new XAWS.S3({
 })
 
 export const handler : APIGatewayProxyHandler = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
-    console.log(`generateUploadUrl event: ${JSON.stringify(event)}`)
     const todoId = event.pathParameters.todId
+    console.log(`generateUploadUrl todoId : ${todoId}`)
     const valid = await db.todoIsExists(todoId)
 
     if (!valid) {
@@ -31,6 +31,7 @@ export const handler : APIGatewayProxyHandler = async (event: APIGatewayProxyEve
     }
 
     const imageId = uuid.v4()
+    console.log(`generateUploadUrl imageId : ${imageId}`)
     const image = await db.createImage(todoId, imageId, event)
 
     const url = getUploadUrl(imageId)
