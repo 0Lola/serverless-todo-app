@@ -7,7 +7,7 @@ import { DocumentClient } from 'aws-sdk/clients/dynamodb'
 const XAWS = AWSXRay.captureAWS(AWS)
 const ITEM_TABLE = process.env.ITEM_TABLE;
 const IMAGE_TABLE = process.env.IMAGE_TABLE;
-const IMAGES_BUCKET = process.env.IMAGES_BUCKET;
+const IMAGE_BUCKET = process.env.IMAGE_BUCKET;
 
 export class DB {
 
@@ -103,7 +103,7 @@ export class DB {
           timestamp,
           imageId,
           ...attachment,
-          imageUrl: `https://${IMAGES_BUCKET}.s3.amazonaws.com/${imageId}`
+          imageUrl: `https://${IMAGE_BUCKET}.s3.amazonaws.com/${imageId}`
         }
         console.log('createImage :', attachment)
       

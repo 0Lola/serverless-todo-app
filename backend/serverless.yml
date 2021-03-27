@@ -17,7 +17,7 @@ provider:
     region: ${opt:region, 'us-east-1'}
     ITEM_TABLE: Item
     IMAGE_TABLE: Image
-    IMAGES_BUCKET: serverless-s3-images-zxa011023
+    IMAGE_BUCKET: serverless-s3-images-zxa011023
     IMAGE_ID_INDEX: ImageIdIndex
     SIGNED_URL_EXPIRATION: 300
     THUMBNAILS_BUCKET: serverless-thumbnail-${self:provider.stage}
@@ -50,7 +50,7 @@ provider:
       Action:
         - s3:PutObject
         - s3:GetObject
-      Resource: arn:aws:s3:::${self:provider.environment.IMAGES_BUCKET}/*
+      Resource: arn:aws:s3:::${self:provider.environment.IMAGE_BUCKET}/*
 
 custom:
   topicName: ServerlessTodoTopic
@@ -151,8 +151,6 @@ resources:
         AttributeDefinitions:
           - AttributeName: id
             AttributeType: S
-          - AttributeName: todoId
-            AttributeType: S
         KeySchema:
           - AttributeName: id
             KeyType: HASH
@@ -199,7 +197,7 @@ resources:
       Type: AWS::S3::Bucket
       DependsOn: SNSTopicPolicy
       Properties:
-        BucketName: ${self:provider.environment.IMAGES_BUCKET}
+        BucketName: ${self:provider.environment.IMAGE_BUCKET}
         NotificationConfiguration:
           TopicConfigurations:
             - Event: s3:ObjectCreated:Put
@@ -230,7 +228,7 @@ resources:
               Effect: Allow
               Principal: '*'
               Action: 's3:GetObject'
-              Resource: 'arn:aws:s3:::${self:provider.environment.IMAGES_BUCKET}/*'
+              Resource: 'arn:aws:s3:::${self:provider.environment.IMAGE_BUCKET}/*'
         Bucket: !Ref AttachmentsBucket
 
     SNSTopicPolicy:
@@ -247,7 +245,7 @@ resources:
                 !Ref ServerlessTodoTopic
               Condition:
                 ArnLike:
-                  AWS:SourceArn: arn:aws:s3:::${self:provider.environment.IMAGES_BUCKET}
+                  AWS:SourceArn: arn:aws:s3:::${self:provider.environment.IMAGE_BUCKET}
         Topics:
           - !Ref ServerlessTodoTopic
 

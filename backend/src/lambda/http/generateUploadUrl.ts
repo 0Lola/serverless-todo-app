@@ -8,7 +8,7 @@ import { APIGatewayProxyEvent, APIGatewayProxyResult, APIGatewayProxyHandler } f
 import { DB } from '../../utils/db'
 
 const db = new DB()
-const IMAGES_BUCKET = process.env.IMAGES_BUCKET
+const IMAGE_BUCKET = process.env.IMAGE_BUCKET
 // const urlExpiration = process.env.SIGNED_URL_EXPIRATION
 
 const XAWS = AWSXRay.captureAWS(AWS)
@@ -51,7 +51,7 @@ export const handler : APIGatewayProxyHandler = async (event: APIGatewayProxyEve
 
 function getUploadUrl(imageId: string) {
     return s3.getSignedUrl('putObject', {
-      Bucket: IMAGES_BUCKET,
+      Bucket: IMAGE_BUCKET,
       Key: imageId,
     //   Expires: urlExpiration
     })
