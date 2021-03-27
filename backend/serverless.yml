@@ -155,6 +155,8 @@ resources:
           - AttributeName: todoId
             KeyType: HASH
         BillingMode: PAY_PER_REQUEST
+        StreamSpecification:
+          StreamViewType: NEW_IMAGE
         TableName: ${self:provider.environment.ITEM_TABLE}
 
     ImageDynamoDBTable:
