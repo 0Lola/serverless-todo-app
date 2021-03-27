@@ -102,10 +102,9 @@ export class DB {
           id,
           timestamp,
           imageId,
-          attachment,
+          ...attachment,
           imageUrl: `https://${IMAGE_BUCKET}.s3.amazonaws.com/${imageId}`
         }
-        console.log('createImage :', attachment)
       
         await this.db
           .put({

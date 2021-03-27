@@ -33,7 +33,8 @@ export const handler = middy(async (event: APIGatewayProxyEvent): Promise<APIGat
 
     const imageId = uuid.v4()
     console.log(`generateUploadUrl imageId : ${imageId}`)
-    await db.createImage(todoId, imageId, event)
+    const image = await db.createImage(todoId, imageId, event)
+    console.log(`createImage succeed : ${image.imageId}`)
 
     const uploadUrl = getUploadUrl(imageId)
     console.log(`generateUploadUrl uploadUrl : ${JSON.stringify(uploadUrl)}`)
