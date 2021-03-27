@@ -9,7 +9,7 @@ import { DB } from '../../utils/db'
 
 const db = new DB()
 const IMAGES_BUCKET = process.env.IMAGES_BUCKET
-const urlExpiration = process.env.SIGNED_URL_EXPIRATION
+// const urlExpiration = process.env.SIGNED_URL_EXPIRATION
 
 const XAWS = AWSXRay.captureAWS(AWS)
 const s3 = new XAWS.S3({
@@ -38,7 +38,8 @@ export const handler : APIGatewayProxyHandler = async (event: APIGatewayProxyEve
     return {
         statusCode: 201,
         headers: {
-            'Access-Control-Allow-Origin': '*'
+            'Access-Control-Allow-Origin': '*',
+            'Access-Control-Allow-Credentials': true
         },
         body: JSON.stringify({
             image: image,
@@ -52,6 +53,6 @@ function getUploadUrl(imageId: string) {
     return s3.getSignedUrl('putObject', {
       Bucket: IMAGES_BUCKET,
       Key: imageId,
-      Expires: urlExpiration
+    //   Expires: urlExpiration
     })
   }
