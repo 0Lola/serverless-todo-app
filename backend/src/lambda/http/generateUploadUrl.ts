@@ -2,8 +2,8 @@ import 'source-map-support/register'
 import * as AWSXRay from 'aws-xray-sdk'
 import * as AWS from 'aws-sdk'
 import * as uuid from 'uuid'
-// import * as middy from 'middy'
-// import { cors } from 'middy/middlewares'
+import * as middy from 'middy'
+import { cors } from 'middy/middlewares'
 import { APIGatewayProxyEvent, APIGatewayProxyResult, APIGatewayProxyHandler } from 'aws-lambda'
 import { DB } from '../../utils/db'
 
@@ -16,7 +16,8 @@ const s3 = new XAWS.S3({
     signatureVersion: 'v4'
 })
 
-export const handler : APIGatewayProxyHandler = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
+// export const handler : APIGatewayProxyHandler = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
+export const handler = middy(async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
     const todoId = event.pathParameters.todoId
     console.log(`generateUploadUrl todoId : ${todoId}`)
     const valid = await db.todoIsExists(todoId)
@@ -38,18 +39,21 @@ export const handler : APIGatewayProxyHandler = async (event: APIGatewayProxyEve
 
     return {
         statusCode: 201,
-        headers: {
-            'Access-Control-Allow-Origin': '*',
-            'Access-Control-Allow-Credentials': true
-        },
         body: JSON.stringify({
             image: image,
             uploadUrl: url
         })
     }
-}
+})
 
+// middy
+handler.use(
+    cors({
+        credentials: true
+    })
+)
 
+  
 function getUploadUrl(imageId: string) {
     return s3.getSignedUrl('putObject', {
       Bucket: IMAGE_BUCKET,
