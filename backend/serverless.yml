@@ -53,7 +53,7 @@ provider:
       Resource: arn:aws:s3:::${self:provider.environment.IMAGES_BUCKET}/*
 
 custom:
-  topicName: ServerlessTopic
+  topicName: ServerlessTodoTopic
   serverless-offline:
     port: 3003
   dynamodb:
@@ -203,7 +203,7 @@ resources:
         NotificationConfiguration:
           TopicConfigurations:
             - Event: s3:ObjectCreated:Put
-              Topic: !Ref ServerlessTopic
+              Topic: !Ref ServerlessTodoTopic
         CorsConfiguration:
           CorsRules:
             -
@@ -244,14 +244,14 @@ resources:
                 AWS: "*"
               Action: sns:Publish
               Resource:
-                !Ref ServerlessTopic
+                !Ref ServerlessTodoTopic
               Condition:
                 ArnLike:
                   AWS:SourceArn: arn:aws:s3:::${self:provider.environment.IMAGES_BUCKET}
         Topics:
-          - !Ref ServerlessTopic
+          - !Ref ServerlessTodoTopic
 
-    ServerlessTopic:
+    ServerlessTodoTopic:
       Type: AWS::SNS::Topic
       Properties:
         DisplayName: Serverless Bucket Topic
