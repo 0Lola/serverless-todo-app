@@ -36,7 +36,7 @@ export const handler = middy(async (event: APIGatewayProxyEvent): Promise<APIGat
     await db.createImage(todoId, imageId, event)
 
     const uploadUrl = getUploadUrl(imageId)
-    console.log(`generateUploadUrl uploadUrl : ${uploadUrl}`)
+    console.log(`generateUploadUrl uploadUrl : ${JSON.stringify(uploadUrl)}`)
 
     return {
         statusCode: 201,
@@ -55,11 +55,11 @@ handler.use(
     })
 )
 
-  
+
 function getUploadUrl(imageId: string) {
     return s3.getSignedUrl('putObject', {
-      Bucket: IMAGE_BUCKET,
-      Key: imageId,
-    //   Expires: urlExpiration
+        Bucket: IMAGE_BUCKET,
+        Key: imageId
+        //   Expires: urlExpiration
     })
-  }
+}

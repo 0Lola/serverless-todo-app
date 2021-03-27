@@ -88,7 +88,7 @@ export class DB {
         }).promise()
 
         const item = result.Item
-        console.log(`todoIsExists: ${item}`);
+        console.log(`todoIsExists: ${JSON.stringify(item)}`);
         return item != null && item != undefined
     }
 
