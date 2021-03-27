@@ -116,6 +116,7 @@ export class DB {
       
         return image
       }
+}
 
 // offline
 function createDynamoDBClient() {
