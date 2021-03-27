@@ -1,5 +1,5 @@
 service:
-  name: serverless-todo-app
+  name: serverless-todo-app-zxa011023
 
 plugins:
   - serverless-webpack
@@ -20,9 +20,9 @@ provider:
     IMAGES_BUCKET: serverless-images-zxa011023
     IMAGE_ID_INDEX: ImageIdIndex
     SIGNED_URL_EXPIRATION: 300
-    # THUMBNAILS_S3_BUCKET: serverless-udagram-thumbnail-${self:provider.stage}
-    # AUTH_0_SECRET_ID: Auth0Secret-${self:provider.stage}
-    # AUTH_0_SECRET_FIELD: auth0Secret
+    THUMBNAILS_BUCKET: serverless-thumbnail-${self:provider.stage}
+    AUTH_0_SECRET_ID: Auth0Secret-${self:provider.stage}
+    AUTH_0_SECRET_FIELD: auth0Secret
 
   iamRoleStatements:
     - Effect: Allow
@@ -95,12 +95,12 @@ functions:
           method: post
           path: todos
           cors: true
-          reqValidatorName: RequestBodyValidator
-          documentation:
-            summary: Create a new Todo
-            description: Create a new Todo
-            requestModels:
-              'application/json': CreateTodoRequest
+          # reqValidatorName: RequestBodyValidator
+          # documentation:
+          #   summary: Create a new Todo
+          #   description: Create a new Todo
+          #   requestModels:
+          #     'application/json': CreateTodoRequest
 
   UpdateTodo:
     handler: src/lambda/http/updateTodo.handler
@@ -109,12 +109,12 @@ functions:
           method: patch
           path: todos/{todoId}
           cors: true
-          reqValidatorName: RequestBodyValidator
-          documentation:
-            summary: Update a Todo
-            description: Update a Todo
-            requestModels:
-              'application/json': UpdateTodoRequest
+          # reqValidatorName: RequestBodyValidator
+          # documentation:
+          #   summary: Update a Todo
+          #   description: Update a Todo
+          #   requestModels:
+          #     'application/json': UpdateTodoRequest
 
   DeleteTodo:
     handler: src/lambda/http/deleteTodo.handler
@@ -145,19 +145,19 @@ resources:
         RestApiId:
           Ref: ApiGatewayRestApi
 
-    # ItemsDynamoDBTable:
-    #   Type: AWS::DynamoDB::Table
-    #   Properties:
-    #     AttributeDefinitions:
-    #       - AttributeName: id
-    #         AttributeType: S
-    #       - AttributeName: todoId
-    #         AttributeType: S
-    #     KeySchema:
-    #       - AttributeName: id
-    #         KeyType: HASH
-    #     BillingMode: PAY_PER_REQUEST
-    #     TableName: ${self:provider.environment.ITEMS_TABLE}
+    ItemsDynamoDBTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        AttributeDefinitions:
+          - AttributeName: id
+            AttributeType: S
+          - AttributeName: todoId
+            AttributeType: S
+        KeySchema:
+          - AttributeName: id
+            KeyType: HASH
+        BillingMode: PAY_PER_REQUEST
+        TableName: ${self:provider.environment.ITEMS_TABLE}
 
     ImagesDynamoDBTable:
       Type: AWS::DynamoDB::Table
@@ -186,14 +186,14 @@ resources:
             Projection:
               ProjectionType: ALL
 
-    RequestBodyValidator:
-      Type: AWS::ApiGateway::RequestValidator
-      Properties:
-        Name: 'request-body-validator'
-        RestApiId:
-          Ref: ApiGatewayRestApi
-        ValidateRequestBody: true
-        ValidateRequestParameters: false
+    # RequestBodyValidator:
+    #   Type: AWS::ApiGateway::RequestValidator
+    #   Properties:
+    #     Name: 'request-body-validator'
+    #     RestApiId:
+    #       Ref: ApiGatewayRestApi
+    #     ValidateRequestBody: true
+    #     ValidateRequestParameters: false
 
     AttachmentsBucket:
       Type: AWS::S3::Bucket
