@@ -48,28 +48,28 @@ provider:
         - s3:GetObject
       Resource: arn:aws:s3:::${self:provider.environment.IMAGES_BUCKET}/*
 
-# custom:
-#   topicName: ServerlessTopic
-#   serverless-offline:
-#     port: 3003
-#   dynamodb:
-#     start:
-#       port: 8000
-#       inMemory: true
-#       migrate: true
-#   documentation:
-#     api:
-#       info:
-#         version: v1.0.0
-#         title: Serverless REST API
-#         description: Serverless application for REST API
-#     models:
-#       - name: CreateTodoRequest
-#         contentType: application/json
-#         schema: ${file(validation/create-todo-request.json)}
-#       - name: UpdateTodoRequest
-#         contentType: application/json
-#         schema: ${file(validation/update-todo-request.json)}
+custom:
+  topicName: ServerlessTopic
+  serverless-offline:
+    port: 3003
+  dynamodb:
+    start:
+      port: 8000
+      inMemory: true
+      migrate: true
+  documentation:
+    api:
+      info:
+        version: v1.0.0
+        title: Serverless REST API
+        description: Serverless application for REST API
+    models:
+      - name: CreateTodoRequest
+        contentType: application/json
+        schema: ${file(src/validation/create-todo-request.json)}
+      - name: UpdateTodoRequest
+        contentType: application/json
+        schema: ${file(src/validation/update-todo-request.json)}
 
 
 functions:
