@@ -96,7 +96,7 @@ export class DB {
 
     async createImage(id: string, imageId: string, event: any) {
         const timestamp = new Date().toISOString()
-        const attachment = JSON.parse(event.body)
+        const attachment = event.body
       
         const image = {
           id,
