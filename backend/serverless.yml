@@ -146,7 +146,7 @@ resources:
           Ref: ApiGatewayRestApi
 
     ItemsDynamoDBTable:
-      Type: "AWS::DynamoDB::Table"
+      Type: AWS::DynamoDB::Table
       Properties:
         AttributeDefinitions:
           - AttributeName: id
@@ -160,7 +160,7 @@ resources:
         TableName: ${self:provider.environment.ITEMS_TABLE}
 
     ImagesDynamoDBTable:
-      Type: "AWS::DynamoDB::Table"
+      Type: AWS::DynamoDB::Table
       Properties:
         AttributeDefinitions:
           - AttributeName: id
