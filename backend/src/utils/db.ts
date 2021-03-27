@@ -6,6 +6,8 @@ import { DocumentClient } from 'aws-sdk/clients/dynamodb'
 
 const XAWS = AWSXRay.captureAWS(AWS)
 const ITEMS_TABLE = process.env.ITEMS_TABLE;
+const IMAGES_TABLE = process.env.IMAGES_TABLE;
+const IMAGES_BUCKET = process.env.IMAGES_S3_BUCKET;
 
 export class DB {
 
@@ -13,6 +15,13 @@ export class DB {
         private readonly db: DocumentClient = createDynamoDBClient()) {
     }
 
+    /**
+     * Todo CRUD
+     * - getAllTodoItems
+     * - createTodoItem
+     * - updateTodoItem
+     * - deleteTodoItem
+     */
     async getAllTodoItems(): Promise<TodoItem[]> {
 
         console.log('getAllTodoItems');
@@ -74,7 +83,34 @@ export class DB {
 
         return todoId
     }
-}
+    
+    /**
+     * Todo CRUD
+     * - createImage
+     * - queryImage
+     */
+    async createImage(id: string, imageId: string, event: any) {
+        const timestamp = new Date().toISOString()
+        const attachment = JSON.parse(event.body)
+      
+        const image = {
+          id,
+          timestamp,
+          imageId,
+          ...attachment,
+          imageUrl: `https://${IMAGES_BUCKET}.s3.amazonaws.com/${imageId}`
+        }
+        console.log('createImage :', attachment)
+      
+        await this.db
+          .put({
+            TableName: IMAGES_TABLE,
+            Item: image
+          })
+          .promise()
+      
+        return image
+      }
 
 // offline
 function createDynamoDBClient() {
