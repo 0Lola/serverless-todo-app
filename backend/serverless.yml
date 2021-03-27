@@ -15,7 +15,7 @@ provider:
   environment:
     stage: ${opt:stage, 'dev'}
     region: ${opt:region, 'us-east-1'}
-    ITEM_TABLE: Item
+    TODO_TABLE: Todo
     IMAGE_TABLE: Image
     IMAGE_BUCKET: serverless-s3-images-zxa011023
     IMAGE_ID_INDEX: ImageIdIndex
@@ -36,7 +36,7 @@ provider:
         - dynamodb:PutItem
         - dynamodb:GetItem
         - dynamodb:DeleteItem
-      Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.ITEM_TABLE}
+      Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.TODO_TABLE}
     - Effect: Allow
       Action:
         - dynamodb:PutItem
@@ -145,7 +145,7 @@ resources:
         RestApiId:
           Ref: ApiGatewayRestApi
 
-    ItemDynamoDBTable:
+    TodoDynamoDBTable:
       Type: AWS::DynamoDB::Table
       Properties:
         AttributeDefinitions:
@@ -157,7 +157,7 @@ resources:
         BillingMode: PAY_PER_REQUEST
         StreamSpecification:
           StreamViewType: NEW_IMAGE
-        TableName: ${self:provider.environment.ITEM_TABLE}
+        TableName: ${self:provider.environment.TODO_TABLE}
 
     ImageDynamoDBTable:
       Type: AWS::DynamoDB::Table
