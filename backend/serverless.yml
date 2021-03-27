@@ -18,7 +18,7 @@ provider:
     ITEMS_TABLE: Items
     IMAGES_TABLE: Images
     IMAGES_BUCKET: serverless-images-zxa011023
-    # IMAGE_ID_INDEX: ImageIdIndex
+    IMAGE_ID_INDEX: ImageIdIndex
     SIGNED_URL_EXPIRATION: 300
     # THUMBNAILS_S3_BUCKET: serverless-udagram-thumbnail-${self:provider.stage}
     # AUTH_0_SECRET_ID: Auth0Secret-${self:provider.stage}
@@ -42,10 +42,10 @@ provider:
         - dynamodb:PutItem
         - dynamodb:Query
       Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.IMAGES_TABLE}
-    # - Effect: Allow
-    #   Action:
-    #     - dynamodb:Query
-    #   Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.IMAGES_TABLE}/index/${self:provider.environment.IMAGE_ID_INDEX}
+    - Effect: Allow
+      Action:
+        - dynamodb:Query
+      Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.IMAGES_TABLE}/index/${self:provider.environment.IMAGE_ID_INDEX}
     - Effect: Allow
       Action:
         - s3:PutObject
@@ -176,13 +176,13 @@ resources:
         StreamSpecification:
           StreamViewType: NEW_IMAGE
         TableName: ${self:provider.environment.IMAGES_TABLE}
-        # GlobalSecondaryIndexes:
-        #   - IndexName: ${self:provider.environment.IMAGE_ID_INDEX}
-        #     KeySchema:
-        #     - AttributeName: imageId
-        #       KeyType: HASH
-        #     Projection:
-        #       ProjectionType: ALL
+        GlobalSecondaryIndexes:
+          - IndexName: ${self:provider.environment.IMAGE_ID_INDEX}
+            KeySchema:
+            - AttributeName: imageId
+              KeyType: HASH
+            Projection:
+              ProjectionType: ALL
 
     RequestBodyValidator:
       Type: AWS::ApiGateway::RequestValidator
