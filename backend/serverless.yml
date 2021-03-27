@@ -57,19 +57,19 @@ custom:
       port: 8000
       inMemory: true
       migrate: true
-  documentation:
-    api:
-      info:
-        version: v1.0.0
-        title: Serverless REST API
-        description: Serverless application for REST API
-    models:
-      - name: CreateTodoRequest
-        contentType: application/json
-        schema: ${file(src/validation/create-todo-request.json)}
-      - name: UpdateTodoRequest
-        contentType: application/json
-        schema: ${file(src/validation/update-todo-request.json)}
+  # documentation:
+  #   api:
+  #     info:
+  #       version: v1.0.0
+  #       title: Serverless REST API
+  #       description: Serverless application for REST API
+  #   models:
+  #     - name: CreateTodoRequest
+  #       contentType: application/json
+  #       schema: ${file(src/validation/create-todo-request.json)}
+  #     - name: UpdateTodoRequest
+  #       contentType: application/json
+  #       schema: ${file(src/validation/update-todo-request.json)}
 
 
 functions:
