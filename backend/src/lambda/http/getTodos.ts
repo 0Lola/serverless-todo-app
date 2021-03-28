@@ -2,15 +2,16 @@ import { TodoItem } from './../../models/TodoItem';
 import { DB } from './../../utils/db';
 import { APIGatewayProxyEvent, APIGatewayProxyResult, APIGatewayProxyHandler } from 'aws-lambda'
 import 'source-map-support/register'
+import { verifyToken } from '../auth/auth0Authorizer';
 
 const db = new DB();
 
 export const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
-    const authorization = event.headers.Authorization
-    const split = authorization.split(' ')
-    const jwtToken = split[1]
-    console.log(`getTodos by token:${JSON.stringify(event)}`);
-    const items = await db.getAllTodoItemsByToken(jwtToken) as TodoItem[]
+    const jwtToken = await verifyToken(event.headers.Authorization)
+    console.log(`getTodos by token:${JSON.stringify(event)}`)
+
+    const items = await db.getAllTodoItemsByToken(jwtToken.sub) as TodoItem[]
+
     return {
         statusCode: 200,
         headers: {

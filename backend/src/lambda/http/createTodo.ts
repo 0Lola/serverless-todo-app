@@ -4,6 +4,7 @@ import 'source-map-support/register'
 import { APIGatewayProxyEvent, APIGatewayProxyHandler, APIGatewayProxyResult } from 'aws-lambda'
 import { CreateTodoRequest } from '../../requests/CreateTodoRequest'
 import { TodoItem } from './../../models/TodoItem';
+import { verifyToken } from '../auth/auth0Authorizer';
 
 const db = new DB();
 
@@ -12,10 +13,8 @@ export const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEven
     console.log(`createTodo : ${JSON.stringify(event)}`);
 
     const todo: CreateTodoRequest = JSON.parse(event.body)
-    const authorization = event.headers.Authorization
-    const split = authorization.split(' ')
-    const jwtToken = split[1]
-    const item = await create(todo,jwtToken)
+    const jwtToken = await verifyToken(event.headers.Authorization)
+    const item = await create(todo,jwtToken.sub)
 
     return {
         statusCode: 200,

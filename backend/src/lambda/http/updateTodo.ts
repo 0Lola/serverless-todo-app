@@ -5,16 +5,15 @@ import { APIGatewayProxyEvent, APIGatewayProxyHandler, APIGatewayProxyResult } f
 import { UpdateTodoRequest } from '../../requests/UpdateTodoRequest'
 import { DB } from '../../utils/db'
 import { TodoItem } from '../../models/TodoItem'
+import { verifyToken } from '../auth/auth0Authorizer'
 
 const db = new DB()
 
 export const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
     const todoId = event.pathParameters.todoId
     const todo: UpdateTodoRequest = JSON.parse(event.body)
-    const authorization = event.headers.Authorization
-    const split = authorization.split(' ')
-    const jwtToken = split[1]
-    const item = await update(todoId,todo,jwtToken)
+    const jwtToken = await verifyToken(event.headers.Authorization)
+    const item = await update(todoId,todo,jwtToken.sub)
     
     return {
         statusCode: 200,
