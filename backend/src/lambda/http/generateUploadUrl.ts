@@ -9,14 +9,13 @@ import { DB } from '../../utils/db'
 
 const db = new DB()
 const IMAGE_BUCKET = process.env.IMAGE_BUCKET
-// const urlExpiration = process.env.SIGNED_URL_EXPIRATION
+const urlExpiration = process.env.SIGNED_URL_EXPIRATION
 
 const XAWS = AWSXRay.captureAWS(AWS)
 const s3 = new XAWS.S3({
     signatureVersion: 'v4'
 })
 
-// export const handler : APIGatewayProxyHandler = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
 export const handler = middy(async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
     const todoId = event.pathParameters.todoId
     console.log(`generateUploadUrl todoId : ${todoId}`)
@@ -65,7 +64,7 @@ handler.use(
 function getUploadUrl(imageId: string) {
     return s3.getSignedUrl('putObject', {
         Bucket: IMAGE_BUCKET,
-        Key: imageId
-        //   Expires: urlExpiration
+        Key: imageId,
+        Expires: urlExpiration
     })
 }

@@ -7,7 +7,7 @@ const db = new DB();
 
 export const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
     const todoId = event.pathParameters.todoId
-    const result = await deleteTodo(todoId)
+    const item = await deleteTodo(todoId)
 
     return {
         statusCode: 200,
@@ -16,7 +16,7 @@ export const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEven
             'Access-Control-Allow-Credentials': true
         },
         body: JSON.stringify({
-            result
+            item
         })
     }
 }

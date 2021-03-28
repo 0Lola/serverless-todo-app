@@ -15,7 +15,7 @@ export const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEven
     const authorization = event.headers.Authorization
     const split = authorization.split(' ')
     const jwtToken = split[1]
-    const result = await create(todo,jwtToken)
+    const item = await create(todo,jwtToken)
 
     return {
         statusCode: 200,
@@ -24,7 +24,7 @@ export const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEven
             'Access-Control-Allow-Credentials': true
         },
         body: JSON.stringify({
-            result
+            item
         })
     }
 }
@@ -34,10 +34,11 @@ export async function create(
     jwtToken: string
 ): Promise<TodoItem> {
 
+    const date = new Date()
     return await db.createTodoItem({
         userId: jwtToken,
         todoId: uuid.v4(),
-        createdAt: new Date().toISOString(),
+        createdAt: `${date.getFullYear()}-${date.getMonth()+1}-${date.getDate()}`,
         name: body.name,
         dueDate: body.dueDate,
         done: false

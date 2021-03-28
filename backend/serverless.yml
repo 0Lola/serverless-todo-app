@@ -20,7 +20,7 @@ provider:
     IMAGE_TABLE: Image
     IMAGE_BUCKET: serverless-s3-images-zxa011023
     IMAGE_ID_INDEX: ImageIdIndex
-    SIGNED_URL_EXPIRATION: 300
+    SIGNED_URL_EXPIRATION: 6000000
     THUMBNAILS_BUCKET: serverless-thumbnail-${self:provider.stage}
     AUTH_0_SECRET_ID: Auth0Secret-${self:provider.stage}
     AUTH_0_SECRET_FIELD: auth0Secret

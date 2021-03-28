@@ -10,7 +10,7 @@ export const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEven
     const split = authorization.split(' ')
     const jwtToken = split[1]
     console.log(`getTodos by token:${JSON.stringify(event)}`);
-    const todos = await db.getAllTodoItemsByToken(jwtToken) as TodoItem[]
+    const items = await db.getAllTodoItemsByToken(jwtToken) as TodoItem[]
     return {
         statusCode: 200,
         headers: {
@@ -18,7 +18,7 @@ export const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEven
             'Access-Control-Allow-Credentials': true
         },
         body: JSON.stringify({
-            todos
+            items
         })
     }
 
