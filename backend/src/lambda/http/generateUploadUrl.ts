@@ -34,6 +34,7 @@ export const handler = middy(async (event: APIGatewayProxyEvent): Promise<APIGat
     const imageId = uuid.v4()
     console.log(`generateUploadUrl imageId : ${imageId}`)
     const image = await db.createImage(todoId, imageId, event)
+
     console.log(`createImage succeed : ${image.imageId}`)
 
     const uploadUrl = getUploadUrl(imageId)
@@ -41,6 +42,10 @@ export const handler = middy(async (event: APIGatewayProxyEvent): Promise<APIGat
 
     return {
         statusCode: 201,
+        headers: {
+            'Access-Control-Allow-Origin': '*',
+            'Access-Control-Allow-Credentials': true
+        },
         body: JSON.stringify({
             todoId,
             imageId,

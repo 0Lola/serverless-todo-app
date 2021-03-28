@@ -77,8 +77,8 @@ custom:
 
 
 functions:
-  # Auth:
-  #   handler: src/lambda/auth/auth0Authorizer.handler
+  Auth:
+    handler: src/lambda/auth/auth0Authorizer.handler
 
   GetTodos:
     handler: src/lambda/http/getTodos.handler
@@ -87,6 +87,7 @@ functions:
           method: get
           path: todos
           cors: true
+          authorizer: Auth
 
   CreateTodo:
     handler: src/lambda/http/createTodo.handler
@@ -95,6 +96,7 @@ functions:
           method: post
           path: todos
           cors: true
+          authorizer: Auth
           # reqValidatorName: RequestBodyValidator
           # documentation:
           #   summary: Create a new Todo
@@ -123,6 +125,7 @@ functions:
           method: delete
           path: todos/{todoId}
           cors: true
+          authorizer: Auth
 
   GenerateUploadUrl:
     handler: src/lambda/http/generateUploadUrl.handler
@@ -131,6 +134,7 @@ functions:
           method: post
           path: todos/{todoId}/attachment
           cors: true
+          authorizer: Auth
 
 resources:
   Resources:
