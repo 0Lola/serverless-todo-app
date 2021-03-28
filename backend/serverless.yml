@@ -33,6 +33,7 @@ provider:
     - Effect: Allow
       Action:
         - dynamodb:Scan
+        - dynamodb:Query
         - dynamodb:PutItem
         - dynamodb:GetItem
         - dynamodb:DeleteItem
