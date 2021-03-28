@@ -8,6 +8,7 @@ const XAWS = AWSXRay.captureAWS(AWS)
 const TODO_TABLE = process.env.TODO_TABLE;
 const IMAGE_TABLE = process.env.IMAGE_TABLE;
 const IMAGE_BUCKET = process.env.IMAGE_BUCKET;
+const USER_ID_INDEX = process.env.USER_ID_INDEX;
 
 export class DB {
 
@@ -32,9 +33,10 @@ export class DB {
 
         console.log(`getAllTodoItemsByToken: ${jwtToken}`);
 
+          
         const result = await this.db.query({
             TableName : TODO_TABLE,
-            IndexName: 'userId',
+            IndexName: USER_ID_INDEX,
             KeyConditionExpression: 'userId = :userId',
             ExpressionAttributeValues: {
                 ':userId': jwtToken

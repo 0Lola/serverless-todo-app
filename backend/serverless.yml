@@ -16,6 +16,7 @@ provider:
     stage: ${opt:stage, 'dev'}
     region: ${opt:region, 'us-east-1'}
     TODO_TABLE: Todo
+    USER_ID_INDEX: UserIdIndex
     IMAGE_TABLE: Image
     IMAGE_BUCKET: serverless-s3-images-zxa011023
     IMAGE_ID_INDEX: ImageIdIndex
@@ -33,11 +34,14 @@ provider:
     - Effect: Allow
       Action:
         - dynamodb:Scan
-        - dynamodb:Query
         - dynamodb:PutItem
         - dynamodb:GetItem
         - dynamodb:DeleteItem
       Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.TODO_TABLE}
+    - Effect: Allow
+      Action:
+        - dynamodb:Query
+      Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.TODO_TABLE}/index/${self:provider.environment.USER_ID_INDEX}
     - Effect: Allow
       Action:
         - dynamodb:PutItem
@@ -75,7 +79,6 @@ custom:
   #     - name: UpdateTodoRequest
   #       contentType: application/json
   #       schema: ${file(src/validation/update-todo-request.json)}
-
 
 functions:
   Auth:
@@ -156,6 +159,8 @@ resources:
         AttributeDefinitions:
           - AttributeName: todoId
             AttributeType: S
+          - AttributeName: userId
+            AttributeType: S
         KeySchema:
           - AttributeName: todoId
             KeyType: HASH
@@ -163,6 +168,13 @@ resources:
         StreamSpecification:
           StreamViewType: NEW_IMAGE
         TableName: ${self:provider.environment.TODO_TABLE}
+        GlobalSecondaryIndexes:
+          - IndexName: ${self:provider.environment.USER_ID_INDEX}
+            KeySchema:
+            - AttributeName: userId
+              KeyType: HASH
+            Projection:
+              ProjectionType: ALL
 
     ImageDynamoDBTable:
       Type: AWS::DynamoDB::Table
