@@ -5,9 +5,11 @@ import 'source-map-support/register'
 const db = new DB();
 
 export const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
-    console.log(`getTodos :${JSON.stringify(event)}`);
-
-    const items = await db.getAllTodoItems();
+    const authorization = event.headers.Authorization
+    const split = authorization.split(' ')
+    const jwtToken = split[1]
+    console.log(`getTodos by token:${JSON.stringify(event)}`);
+    const items = await db.getAllTodoItemsByToken(jwtToken);
 
     return {
         statusCode: 200,

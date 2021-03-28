@@ -28,6 +28,24 @@ export class DB {
         return items as TodoItem[]
     }
 
+    async getAllTodoItemsByToken(jwtToken:string): Promise<TodoItem[]> {
+
+        console.log(`getAllTodoItemsByToken: ${jwtToken}`);
+
+        const result = await this.db.query({
+            TableName : TODO_TABLE,
+            KeyConditionExpression: 'userId = :userId',
+            ExpressionAttributeValues: {
+                ':userId': jwtToken
+            }
+        }).promise()
+        
+        if(result.Count === 0)
+            return []
+        
+        const items = result.Items
+        return items as TodoItem[]
+    }
     async createTodoItem(item: TodoItem): Promise<TodoItem> {
         await this.db.put({
             TableName: TODO_TABLE,

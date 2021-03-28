@@ -12,7 +12,10 @@ export const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEven
     console.log(`createTodo : ${JSON.stringify(event)}`);
 
     const todo: CreateTodoRequest = JSON.parse(event.body)
-    const result = await create(todo)
+    const authorization = event.headers.Authorization
+    const split = authorization.split(' ')
+    const jwtToken = split[1]
+    const result = await create(todo,jwtToken)
 
     return {
         statusCode: 200,
@@ -32,7 +35,7 @@ export async function create(
 ): Promise<TodoItem> {
 
     return await db.createTodoItem({
-        userId:  jwtToken,
+        userId: jwtToken,
         todoId: uuid.v4(),
         createdAt: new Date().toISOString(),
         name: body.name,
