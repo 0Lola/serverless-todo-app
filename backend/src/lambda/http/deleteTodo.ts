@@ -7,10 +7,7 @@ const db = new DB();
 
 export const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
     const todoId = event.pathParameters.todoId
-    const authorization = event.headers.Authorization
-    const split = authorization.split(' ')
-    const jwtToken = split[1]
-    const result = await deleteTodo(todoId,jwtToken)
+    const result = await deleteTodo(todoId)
 
     return {
         statusCode: 200,
@@ -25,8 +22,7 @@ export const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEven
 }
 
 export async function deleteTodo(
-    todoId: string,
-    jwtToken?: string
+    todoId: string
 ): Promise<string> {
 
     return await db.deleteTodoItem(todoId)

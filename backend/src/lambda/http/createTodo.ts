@@ -31,7 +31,7 @@ export const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEven
 
 export async function create(
     body: CreateTodoRequest,
-    jwtToken?: string
+    jwtToken: string
 ): Promise<TodoItem> {
 
     return await db.createTodoItem({

@@ -11,8 +11,10 @@ const db = new DB()
 export const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
     const todoId = event.pathParameters.todoId
     const todo: UpdateTodoRequest = JSON.parse(event.body)
-
-    const result = await update(todoId,todo)
+    const authorization = event.headers.Authorization
+    const split = authorization.split(' ')
+    const jwtToken = split[1]
+    const result = await update(todoId,todo,jwtToken)
     
     return {
         statusCode: 200,
@@ -29,8 +31,8 @@ export const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEven
 export async function update(
     todoId: string,
     body: UpdateTodoRequest,
-    // jwtToken?: string
+    jwtToken: string
 ): Promise<TodoItem> {
 
-    return await db.updateTodoItem(todoId,body)
+    return await db.updateTodoItem(todoId,body,jwtToken)
 }

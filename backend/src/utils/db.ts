@@ -55,19 +55,20 @@ export class DB {
         return item
     }
 
-    async updateTodoItem(todoId:string ,item: UpdateTodoRequest): Promise<any> {
+    async updateTodoItem(todoId:string ,item: UpdateTodoRequest,jwtToken: string): Promise<any> {
         await this.db.update({
             TableName: TODO_TABLE,
             Key: {
                 todoId: todoId
             },
             UpdateExpression: "SET name = :name, dueDate = :dueDate, done = :done",
-                ConditionExpression: "todoId = :todoId",
+                ConditionExpression: "todoId = :todoId, userId = :userId",
                 ExpressionAttributeValues: {
                     ":todoId": todoId,
                     ":name": item.name,
                     ":dueDate": item.dueDate,
                     ":done": item.done,
+                    ":userId": jwtToken,
                 },
             ReturnValues:"UPDATED_NEW"
         },
