@@ -1,3 +1,4 @@
+import { TodoItem } from './../../models/TodoItem';
 import { DB } from './../../utils/db';
 import { APIGatewayProxyEvent, APIGatewayProxyResult, APIGatewayProxyHandler } from 'aws-lambda'
 import 'source-map-support/register'
@@ -9,8 +10,8 @@ export const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEven
     const split = authorization.split(' ')
     const jwtToken = split[1]
     console.log(`getTodos by token:${JSON.stringify(event)}`);
-    const items = await db.getAllTodoItemsByToken(jwtToken);
-
+    const todos = await db.getAllTodoItems() as TodoItem[]
+    const result = todos ? todos.filter(e=>e.userId === jwtToken) : []
     return {
         statusCode: 200,
         headers: {
@@ -18,7 +19,7 @@ export const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEven
             'Access-Control-Allow-Credentials': true
         },
         body: JSON.stringify({
-            items
+            result
         })
     }
 
