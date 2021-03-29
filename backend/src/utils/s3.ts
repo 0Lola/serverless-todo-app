@@ -19,7 +19,7 @@ export class S3 {
         const imageItem = await  s3.getSignedUrl('putObject', {
             Bucket: IMAGE_BUCKET,
             Key: imageId,
-            Expires: urlExpiration
+            // Expires: urlExpiration
         }).promise()
 
         return imageItem as ImageItem;
