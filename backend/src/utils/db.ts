@@ -29,23 +29,23 @@ export class DB {
         return items as TodoItem[]
     }
 
-    async getAllTodoItemsByToken(jwtToken:string): Promise<TodoItem[]> {
+    async getAllTodoItemsByToken(jwtToken: string): Promise<TodoItem[]> {
 
         console.log(`getAllTodoItemsByToken: ${jwtToken}`);
 
-          
+
         const result = await this.db.query({
-            TableName : TODO_TABLE,
+            TableName: TODO_TABLE,
             IndexName: USER_ID_INDEX,
             KeyConditionExpression: 'userId = :userId',
             ExpressionAttributeValues: {
                 ':userId': jwtToken
             }
         }).promise()
-        
-        if(result.Count === 0)
+
+        if (result.Count === 0)
             return []
-        
+
         const items = result.Items
         return items as TodoItem[]
     }
@@ -58,39 +58,39 @@ export class DB {
         return item
     }
 
-    async updateTodoItem(todoId:string ,item: UpdateTodoRequest,jwtToken: string): Promise<any> {
+    async updateTodoItem(todoId: string, item: UpdateTodoRequest, userId: string): Promise<any> {
         await this.db.update({
             TableName: TODO_TABLE,
             Key: {
                 todoId: todoId
             },
             UpdateExpression: "SET name = :name, dueDate = :dueDate, done = :done",
-                ConditionExpression: "todoId = :todoId, userId = :userId",
-                ExpressionAttributeValues: {
-                    ":todoId": todoId,
-                    ":name": item.name,
-                    ":dueDate": item.dueDate,
-                    ":done": item.done,
-                    ":userId": jwtToken,
-                },
-            ReturnValues:"UPDATED_NEW"
+            ConditionExpression: "todoId = :todoId, userId = :userId",
+            ExpressionAttributeValues: {
+                ":todoId": todoId,
+                ":name": item.name,
+                ":dueDate": item.dueDate,
+                ":done": item.done,
+                ":userId": userId,
+            },
+            ReturnValues: "UPDATED_NEW"
         },
-        (err,res)=>{
-            if(err){
-                console.error(`updateTodo error: ${JSON.stringify(err)}`);
-                return err;
+            (err, res) => {
+                if (err) {
+                    console.error(`updateTodo error: ${JSON.stringify(err)}`);
+                    return err;
 
-            }
-            if(res){
-                console.log(`updateTodo succeeded: ${JSON.stringify(res)}`);
-                return res;
-            }
-            
-        }).promise()
+                }
+                if (res) {
+                    console.log(`updateTodo succeeded: ${JSON.stringify(res)}`);
+                    return res;
+                }
+
+            }).promise()
 
     }
 
-    async deleteTodoItem(todoId:string): Promise<string>{
+    async deleteTodoItem(todoId: string): Promise<string> {
         await this.db.delete({
             TableName: TODO_TABLE,
             Key: {
@@ -100,8 +100,8 @@ export class DB {
 
         return todoId
     }
-    
-    async todoIsExists(todoId:string): Promise<boolean> {
+
+    async todoIsExists(todoId: string): Promise<boolean> {
         const result = await this.db.get({
             TableName: TODO_TABLE,
             Key: {
@@ -119,24 +119,24 @@ export class DB {
     async createImage(id: string, imageId: string, event: any) {
         const timestamp = new Date().toISOString()
         const attachment = event.body
-      
+
         const image = {
-          id,
-          timestamp,
-          imageId,
-          attachment,
-          imageUrl: `https://${IMAGE_BUCKET}.s3.amazonaws.com/${imageId}`
+            id,
+            timestamp,
+            imageId,
+            attachment,
+            imageUrl: `https://${IMAGE_BUCKET}.s3.amazonaws.com/${imageId}`
         }
-      
+
         await this.db
-          .put({
-            TableName: IMAGE_TABLE,
-            Item: image
-          })
-          .promise()
-      
+            .put({
+                TableName: IMAGE_TABLE,
+                Item: image
+            })
+            .promise()
+
         return image
-      }
+    }
 }
 
 // offline

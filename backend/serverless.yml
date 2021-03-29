@@ -123,6 +123,7 @@ functions:
           method: patch
           path: todos/{todoId}
           cors: true
+          authorizer: Auth
           # reqValidatorName: RequestBodyValidator
           # documentation:
           #   summary: Update a Todo
