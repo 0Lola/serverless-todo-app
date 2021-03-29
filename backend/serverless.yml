@@ -106,7 +106,7 @@ functions:
           path: todos
           cors: true
           authorizer: Auth
-      iamRoleStatements:
+    iamRoleStatements:
       - Effect: Allow
         Action:
           - dynamodb:Query
@@ -120,7 +120,7 @@ functions:
           path: todos
           cors: true
           authorizer: Auth
-      iamRoleStatements:
+    iamRoleStatements:
       - Effect: Allow
         Action:
           - dynamodb:PutItem
@@ -140,7 +140,7 @@ functions:
           path: todos/{todoId}
           cors: true
           authorizer: Auth
-      iamRoleStatements:
+    iamRoleStatements:
       - Effect: Allow
         Action:
           - dynamodb:UpdateItem
@@ -160,7 +160,7 @@ functions:
           path: todos/{todoId}
           cors: true
           authorizer: Auth
-      iamRoleStatements:
+    iamRoleStatements:
       - Effect: Allow
         Action:
           - dynamodb:DeleteItem
@@ -174,7 +174,7 @@ functions:
           path: todos/{todoId}/attachment
           cors: true
           authorizer: Auth
-      iamRoleStatements:
+    iamRoleStatements:
       - Effect: Allow
         Action:
           - dynamodb:UpdateItem
