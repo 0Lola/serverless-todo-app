@@ -64,7 +64,7 @@ export class DB {
             Key: {
                 todoId: todoId
             },
-            UpdateExpression: "SET name = :name, dueDate = :dueDate, done = :done",
+            UpdateExpression: "SET $name = :name, $dueDate = :dueDate, $done = :done",
             ConditionExpression: "todoId = :todoId, userId = :userId",
             ExpressionAttributeValues: {
                 ":todoId": todoId,
@@ -72,6 +72,11 @@ export class DB {
                 ":dueDate": item.dueDate,
                 ":done": item.done,
                 ":userId": userId,
+            },
+            ExpressionAttributeNames:{
+                "$name": "name",
+                "$dueDate": "dueDate",
+                "$done": "done"
             },
             ReturnValues: "UPDATED_NEW"
         },
