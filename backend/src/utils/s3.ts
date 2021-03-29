@@ -15,14 +15,12 @@ export class S3 {
 
     constructor() { }
 
-    async getUploadImageItem(imageId: string): Promise<ImageItem> {
-        const imageItem = await  s3.getSignedUrl('putObject', {
+    getUploadImageItem(imageId: string): ImageItem {
+        return s3.getSignedUrl('putObject', {
             Bucket: IMAGE_BUCKET,
             Key: imageId,
             // Expires: urlExpiration
-        }).promise()
-
-        return imageItem as ImageItem;
+        }) as ImageItem
     }
 
 }

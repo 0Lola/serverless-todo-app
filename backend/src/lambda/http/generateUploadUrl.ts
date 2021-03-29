@@ -27,7 +27,7 @@ export const handler = middy(async (event: APIGatewayProxyEvent): Promise<APIGat
     const image = await db.createImage(todoId, imageId)
     await db.updateTodoItemAttachmentUrl(todoId,image.imageUrl)
 
-    const imageItem = await s3.getUploadImageItem(imageId)
+    const imageItem = s3.getUploadImageItem(imageId)
     console.log(`generateUploadUrl uploadUrl : ${JSON.stringify(imageItem.uploadUrl)}`)
 
     return {
