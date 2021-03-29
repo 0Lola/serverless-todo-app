@@ -5,12 +5,14 @@ import { APIGatewayProxyEvent, APIGatewayProxyHandler, APIGatewayProxyResult } f
 import { CreateTodoRequest } from '../../requests/CreateTodoRequest'
 import { TodoItem } from './../../models/TodoItem';
 import { parseUserId } from '../../auth/utils';
+import { createLogger } from '../../utils/logger'
 
 const db = new DB();
+const logger = createLogger('auth')
 
 export const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
 
-    console.log(`createTodo : ${JSON.stringify(event)}`);
+    logger.info(`createTodo : ${JSON.stringify(event)}`);
 
     const todo: CreateTodoRequest = JSON.parse(event.body)
     const split = event.headers.Authorization.split(' ')

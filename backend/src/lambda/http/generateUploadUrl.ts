@@ -3,15 +3,17 @@ import * as uuid from 'uuid'
 import * as middy from 'middy'
 import { cors } from 'middy/middlewares'
 import { APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda'
+import { createLogger } from '../../utils/logger'
 import { DB } from '../../utils/db'
 import { S3 } from '../../utils/s3'
 
 const db = new DB()
 const s3 = new S3()
+const logger = createLogger('auth')
 
 export const handler = middy(async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
     const todoId = event.pathParameters.todoId
-    console.log(`generateUploadUrl todoId : ${todoId}`)
+    logger.info(`generateUploadUrl todoId : ${todoId}`)
     const valid = await db.todoIsExists(todoId)
 
     if (!valid) {
@@ -28,7 +30,7 @@ export const handler = middy(async (event: APIGatewayProxyEvent): Promise<APIGat
     await db.updateTodoItemAttachmentUrl(todoId,image.imageUrl)
 
     const imageItem = s3.getUploadImageItem(imageId)
-    console.log(`generateUploadUrl uploadUrl : ${JSON.stringify(imageItem.uploadUrl)}`)
+    logger.info(`generateUploadUrl uploadUrl : ${JSON.stringify(imageItem.uploadUrl)}`)
 
     return {
         statusCode: 201,

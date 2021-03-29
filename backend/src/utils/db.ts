@@ -16,11 +16,9 @@ export class DB {
         private readonly db: DocumentClient = createDynamoDBClient()) {
     }
 
-    // Todo Item
+    // Todo
 
     async getAllTodoItems(): Promise<TodoItem[]> {
-
-        console.log('getAllTodoItems');
         const result = await this.db.scan({
             TableName: TODO_TABLE
         }).promise()
@@ -30,9 +28,6 @@ export class DB {
     }
 
     async getAllTodoItemsByToken(jwtToken: string): Promise<TodoItem[]> {
-
-        console.log(`getAllTodoItemsByToken: ${jwtToken}`);
-
 
         const result = await this.db.query({
             TableName: TODO_TABLE,
@@ -96,7 +91,8 @@ export class DB {
     }
 
     async updateTodoItemAttachmentUrl(todoId: string, attachmentUrl: string): Promise<any> {
-        await this.db.update({
+
+        const item = await this.db.update({
             TableName: TODO_TABLE,
             Key: {
                 todoId: todoId
@@ -112,20 +108,9 @@ export class DB {
                 '#t': 'todoId'
             },
             ReturnValues: "UPDATED_NEW"
-        },
-            (err, res) => {
-                if (err) {
-                    console.error(`updateTodo AttachmentUrl error: ${JSON.stringify(err)}`);
-                    return err;
+        }).promise();
 
-                }
-                if (res) {
-                    console.log(`updateTodo AttachmentUrl succeeded: ${JSON.stringify(res)}`);
-                    return res;
-                }
-
-            }).promise()
-
+        return item;
     }
 
     async deleteTodoItem(todoId: string): Promise<string> {
@@ -148,7 +133,6 @@ export class DB {
         }).promise()
 
         const item = result.Item
-        console.log(`todoIsExists: ${JSON.stringify(item)}`);
         return item != null && item != undefined
     }
 

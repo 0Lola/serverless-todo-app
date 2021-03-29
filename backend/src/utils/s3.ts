@@ -10,7 +10,6 @@ const s3 = new XAWS.S3({
     signatureVersion: 'v4'
 })
 
-
 export class S3 {
 
     constructor() { }
@@ -20,7 +19,7 @@ export class S3 {
             Bucket: IMAGE_BUCKET,
             Key: imageId,
             // Expires: urlExpiration
-        }) as ImageItem
+        })
     }
 
 }
