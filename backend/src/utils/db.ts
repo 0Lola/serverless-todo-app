@@ -76,7 +76,7 @@ export class DB {
                 "#n": "name",
                 "#dd": "dueDate",
                 "#d": "done",
-                "#t": "todo"
+                "#t": "todoId"
             },
             ReturnValues: "UPDATED_NEW"
         },
