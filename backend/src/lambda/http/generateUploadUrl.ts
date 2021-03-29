@@ -24,10 +24,8 @@ export const handler = middy(async (event: APIGatewayProxyEvent): Promise<APIGat
     }
 
     const imageId = uuid.v4()
-    console.log(`generateUploadUrl imageId : ${imageId}`)
-    const image = await db.createImage(todoId, imageId, event)
-
-    console.log(`createImage succeed : ${image.imageId}`)
+    const image = await db.createImage(todoId, imageId)
+    await db.updateTodoItemAttachmentUrl(todoId,image.imageUrl)
 
     const imageItem = await s3.getUploadImageItem(imageId)
     console.log(`generateUploadUrl uploadUrl : ${JSON.stringify(imageItem.uploadUrl)}`)
@@ -39,7 +37,7 @@ export const handler = middy(async (event: APIGatewayProxyEvent): Promise<APIGat
             'Access-Control-Allow-Credentials': true
         },
         body:JSON.stringify({
-            ...imageItem
+            uploadUrl: imageItem.uploadUrl
         })
     }
 })

@@ -177,6 +177,8 @@ resources:
             AttributeType: S
           - AttributeName: done
             AttributeType: BOOL
+          - AttributeName: attachmentUrl
+            AttributeType: S
         KeySchema:
           - AttributeName: todoId
             KeyType: HASH

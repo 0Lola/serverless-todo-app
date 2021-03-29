@@ -64,19 +64,19 @@ export class DB {
             Key: {
                 todoId: todoId
             },
-            UpdateExpression: "SET #n = :name, #dd = :dueDate, #d = :done",
-            ConditionExpression: "#t = :todoId",
+            UpdateExpression: 'SET #n = :name, #dd = :dueDate, #d = :done',
+            ConditionExpression: '#t = :todoId',
             ExpressionAttributeValues: {
-                ":todoId": todoId,
-                ":name": item.name,
-                ":dueDate": item.dueDate,
-                ":done": item.done
+                ':todoId': todoId,
+                ':name': item.name,
+                ':dueDate': item.dueDate,
+                ':done': item.done,
             },
             ExpressionAttributeNames:{
-                "#n": "name",
-                "#dd": "dueDate",
-                "#d": "done",
-                "#t": "todoId"
+                '#n': 'name',
+                '#dd': 'dueDate',
+                '#d': 'done',
+                '#t': 'todoId',
             },
             ReturnValues: "UPDATED_NEW"
         },
@@ -88,6 +88,39 @@ export class DB {
                 }
                 if (res) {
                     console.log(`updateTodo succeeded: ${JSON.stringify(res)}`);
+                    return res;
+                }
+
+            }).promise()
+
+    }
+
+    async updateTodoItemAttachmentUrl(todoId: string, attachmentUrl: string): Promise<any> {
+        await this.db.update({
+            TableName: TODO_TABLE,
+            Key: {
+                todoId: todoId
+            },
+            UpdateExpression: 'SET #a = :attachmentUrl',
+            ConditionExpression: '#t = :todoId',
+            ExpressionAttributeValues: {
+                ':todoId': todoId,
+                ':attachmentUrl': attachmentUrl,
+            },
+            ExpressionAttributeNames:{
+                '#a': 'attachmentUrl',
+                '#t': 'todoId'
+            },
+            ReturnValues: "UPDATED_NEW"
+        },
+            (err, res) => {
+                if (err) {
+                    console.error(`updateTodo AttachmentUrl error: ${JSON.stringify(err)}`);
+                    return err;
+
+                }
+                if (res) {
+                    console.log(`updateTodo AttachmentUrl succeeded: ${JSON.stringify(res)}`);
                     return res;
                 }
 
@@ -121,15 +154,13 @@ export class DB {
 
     // Image
 
-    async createImage(id: string, imageId: string, event: any) {
+    async createImage(id: string, imageId: string) {
         const timestamp = new Date().toISOString()
-        const attachment = event.body
 
         const image = {
             id,
             timestamp,
             imageId,
-            attachment,
             imageUrl: `https://${IMAGE_BUCKET}.s3.amazonaws.com/${imageId}`
         }
 
