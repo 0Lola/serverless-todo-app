@@ -58,7 +58,7 @@ export class DB {
         return item
     }
 
-    async updateTodoItem(todoId: string, item: UpdateTodoRequest, userId: string): Promise<any> {
+    async updateTodoItem(todoId: string, item: UpdateTodoRequest): Promise<any> {
         await this.db.update({
             TableName: TODO_TABLE,
             Key: {
