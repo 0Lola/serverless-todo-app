@@ -70,8 +70,7 @@ export class DB {
                 ":todoId": todoId,
                 ":name": item.name,
                 ":dueDate": item.dueDate,
-                ":done": item.done,
-                ":userId": userId,
+                ":done": item.done
             },
             ExpressionAttributeNames:{
                 "#n": "name",
