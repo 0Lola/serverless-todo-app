@@ -1,20 +1,13 @@
 import 'source-map-support/register'
-import * as AWSXRay from 'aws-xray-sdk'
-import * as AWS from 'aws-sdk'
 import * as uuid from 'uuid'
 import * as middy from 'middy'
 import { cors } from 'middy/middlewares'
 import { APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda'
 import { DB } from '../../utils/db'
+import { S3 } from '../../utils/s3'
 
 const db = new DB()
-const IMAGE_BUCKET = process.env.IMAGE_BUCKET
-const urlExpiration = process.env.SIGNED_URL_EXPIRATION
-
-const XAWS = AWSXRay.captureAWS(AWS)
-const s3 = new XAWS.S3({
-    signatureVersion: 'v4'
-})
+const s3 = new S3()
 
 export const handler = middy(async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
     const todoId = event.pathParameters.todoId
@@ -36,8 +29,8 @@ export const handler = middy(async (event: APIGatewayProxyEvent): Promise<APIGat
 
     console.log(`createImage succeed : ${image.imageId}`)
 
-    const uploadUrl = getUploadUrl(imageId)
-    console.log(`generateUploadUrl uploadUrl : ${JSON.stringify(uploadUrl)}`)
+    const imageItem = await s3.getUploadImageItem(imageId)
+    console.log(`generateUploadUrl uploadUrl : ${JSON.stringify(imageItem.uploadUrl)}`)
 
     return {
         statusCode: 201,
@@ -45,10 +38,8 @@ export const handler = middy(async (event: APIGatewayProxyEvent): Promise<APIGat
             'Access-Control-Allow-Origin': '*',
             'Access-Control-Allow-Credentials': true
         },
-        body: JSON.stringify({
-            todoId,
-            imageId,
-            uploadUrl
+        body:JSON.stringify({
+            ...imageItem
         })
     }
 })
@@ -58,12 +49,3 @@ handler.use(
         credentials: true
     })
 )
-
-
-function getUploadUrl(imageId: string) {
-    return s3.getSignedUrl('putObject', {
-        Bucket: IMAGE_BUCKET,
-        Key: imageId,
-        Expires: urlExpiration
-    })
-}
