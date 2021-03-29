@@ -170,6 +170,12 @@ resources:
             AttributeType: S
           - AttributeName: userId
             AttributeType: S
+          - AttributeName: name
+            AttributeType: S
+          - AttributeName: dueDate
+            AttributeType: S
+          - AttributeName: done
+            AttributeType: BOOL
         KeySchema:
           - AttributeName: todoId
             KeyType: HASH
