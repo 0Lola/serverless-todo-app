@@ -1,3 +1,4 @@
+import { ImageItem } from './../../models/ImageItem';
 import 'source-map-support/register'
 import * as uuid from 'uuid'
 import * as middy from 'middy'

@@ -22,8 +22,8 @@ export class DB {
         const result = await this.db.scan({
             TableName: TODO_TABLE
         }).promise()
-
         const items = result.Items
+        console.log(`getAllTodoItems response: ${items}`)
         return items as TodoItem[]
     }
 
@@ -42,19 +42,23 @@ export class DB {
             return []
 
         const items = result.Items
+        console.log(`getAllTodoItemsByToken response: ${items}`)
         return items as TodoItem[]
     }
+
     async createTodoItem(item: TodoItem): Promise<TodoItem> {
         await this.db.put({
             TableName: TODO_TABLE,
             Item: item
         }).promise()
 
+        console.log(`createTodoItem response: ${item}`)
+
         return item
     }
 
     async updateTodoItem(todoId: string, item: UpdateTodoRequest): Promise<any> {
-        await this.db.update({
+        const newTodo = await this.db.update({
             TableName: TODO_TABLE,
             Key: {
                 todoId: todoId
@@ -74,25 +78,16 @@ export class DB {
                 '#t': 'todoId',
             },
             ReturnValues: "UPDATED_NEW"
-        },
-            (err, res) => {
-                if (err) {
-                    console.error(`updateTodo error: ${JSON.stringify(err)}`);
-                    return err;
+        }).promise()
 
-                }
-                if (res) {
-                    console.log(`updateTodo succeeded: ${JSON.stringify(res)}`);
-                    return res;
-                }
+        console.log(`updateTodoItem response: ${newTodo}`)
 
-            }).promise()
-
+        return newTodo
     }
 
     async updateTodoItemAttachmentUrl(todoId: string, attachmentUrl: string): Promise<any> {
 
-        const item = await this.db.update({
+        const newTodo = await this.db.update({
             TableName: TODO_TABLE,
             Key: {
                 todoId: todoId
@@ -110,7 +105,9 @@ export class DB {
             ReturnValues: "UPDATED_NEW"
         }).promise();
 
-        return item;
+        console.log(`updateTodoItemAttachmentUrl response: ${newTodo}`)
+
+        return newTodo;
     }
 
     async deleteTodoItem(todoId: string): Promise<string> {
@@ -121,6 +118,7 @@ export class DB {
             }
         }).promise()
 
+        console.log(`deleteTodoItem response: ${todoId}`)
         return todoId
     }
 
@@ -133,12 +131,14 @@ export class DB {
         }).promise()
 
         const item = result.Item
-        return item != null && item != undefined
+        const isExist = item != null && item != undefined
+        console.log(`todoIsExists response: ${isExist}`)
+        return isExist
     }
 
     // Image
 
-    async createImage(id: string, imageId: string) {
+    async createImage(id: string, imageId: string): Promise<any> {
         const timestamp = new Date().toISOString()
 
         const image = {
@@ -148,14 +148,14 @@ export class DB {
             imageUrl: `https://${IMAGE_BUCKET}.s3.amazonaws.com/${imageId}`
         }
 
-        await this.db
+        const newImage = await this.db
             .put({
                 TableName: IMAGE_TABLE,
                 Item: image
-            })
-            .promise()
+            }).promise()
+        console.log(`createImage response: ${JSON.stringify(newImage)}`)
 
-        return image
+        return newImage
     }
 }
 

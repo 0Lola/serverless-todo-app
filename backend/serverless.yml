@@ -10,6 +10,11 @@ plugins:
   - serverless-plugin-canary-deployments
 
 provider:
+
+  tracing:
+    lambda: true
+    apiGateway: true
+
   name: aws
   runtime: nodejs12.x
   environment:
@@ -31,32 +36,32 @@ provider:
         - codedeploy:*
       Resource:
         - '*'
-    - Effect: Allow
-      Action:
-        - dynamodb:Scan
-        - dynamodb:PutItem
-        - dynamodb:GetItem
-        - dynamodb:UpdateItem
-        - dynamodb:DeleteItem
-      Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.TODO_TABLE}
-    - Effect: Allow
-      Action:
-        - dynamodb:Query
-      Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.TODO_TABLE}/index/${self:provider.environment.USER_ID_INDEX}
-    - Effect: Allow
-      Action:
-        - dynamodb:PutItem
-        - dynamodb:Query
-      Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.IMAGE_TABLE}
-    - Effect: Allow
-      Action:
-        - dynamodb:Query
-      Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.IMAGE_TABLE}/index/${self:provider.environment.IMAGE_ID_INDEX}
-    - Effect: Allow
-      Action:
-        - s3:PutObject
-        - s3:GetObject
-      Resource: arn:aws:s3:::${self:provider.environment.IMAGE_BUCKET}/*
+    # - Effect: Allow
+    #   Action:
+    #     - dynamodb:Scan
+    #     - dynamodb:PutItem
+    #     - dynamodb:GetItem
+    #     - dynamodb:UpdateItem
+    #     - dynamodb:DeleteItem
+    #   Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.TODO_TABLE}
+    # - Effect: Allow
+    #   Action:
+    #     - dynamodb:Query
+    #   Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.TODO_TABLE}/index/${self:provider.environment.USER_ID_INDEX}
+    # - Effect: Allow
+    #   Action:
+    #     - dynamodb:PutItem
+    #     - dynamodb:Query
+    #   Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.IMAGE_TABLE}
+    # - Effect: Allow
+    #   Action:
+    #     - dynamodb:Query
+    #   Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.IMAGE_TABLE}/index/${self:provider.environment.IMAGE_ID_INDEX}
+    # - Effect: Allow
+    #   Action:
+    #     - s3:PutObject
+    #     - s3:GetObject
+    #   Resource: arn:aws:s3:::${self:provider.environment.IMAGE_BUCKET}/*
     - Effect: Allow
       Action:
         - secretsmanager:GetSecretValue
@@ -101,6 +106,11 @@ functions:
           path: todos
           cors: true
           authorizer: Auth
+      iamRoleStatements:
+      - Effect: Allow
+        Action:
+          - dynamodb:Query
+        Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.TODO_TABLE}/index/${self:provider.environment.USER_ID_INDEX}
 
   CreateTodo:
     handler: src/lambda/http/createTodo.handler
@@ -110,6 +120,11 @@ functions:
           path: todos
           cors: true
           authorizer: Auth
+      iamRoleStatements:
+      - Effect: Allow
+        Action:
+          - dynamodb:PutItem
+        Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.TODO_TABLE}
           # reqValidatorName: RequestBodyValidator
           # documentation:
           #   summary: Create a new Todo
@@ -125,6 +140,11 @@ functions:
           path: todos/{todoId}
           cors: true
           authorizer: Auth
+      iamRoleStatements:
+      - Effect: Allow
+        Action:
+          - dynamodb:UpdateItem
+        Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.TODO_TABLE}
           # reqValidatorName: RequestBodyValidator
           # documentation:
           #   summary: Update a Todo
@@ -140,6 +160,11 @@ functions:
           path: todos/{todoId}
           cors: true
           authorizer: Auth
+      iamRoleStatements:
+      - Effect: Allow
+        Action:
+          - dynamodb:DeleteItem
+        Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.TODO_TABLE}
 
   GenerateUploadUrl:
     handler: src/lambda/http/generateUploadUrl.handler
@@ -149,6 +174,22 @@ functions:
           path: todos/{todoId}/attachment
           cors: true
           authorizer: Auth
+      iamRoleStatements:
+      - Effect: Allow
+        Action:
+          - dynamodb:UpdateItem
+          - dynamodb:GetItem
+        Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.TODO_TABLE}
+      - Effect: Allow
+        Action:
+          - dynamodb:PutItem
+          - dynamodb:Query
+        Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.IMAGE_TABLE}
+      - Effect: Allow
+        Action:
+          - s3:PutObject
+          - s3:GetObject
+        Resource: arn:aws:s3:::${self:provider.environment.IMAGE_BUCKET}/*
 
 resources:
   Resources:
