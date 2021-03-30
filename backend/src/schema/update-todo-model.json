@@ -3,15 +3,6 @@
     "title": "item",
     "type": "object",
     "properties": {
-      "userId": {
-        "type": "string"
-      },
-      "todoId": {
-        "type": "string"
-      },
-      "createdAt": {
-        "type": "string"
-      },
       "name": {
         "type": "string"
       },
@@ -26,13 +17,16 @@
       }
     },
     "required": [
-      "userId",
-      "todoId",
-      "createdAt",
       "name",
       "dueDate",
       "done"
     ],
-    "additionalProperties": false
+    "additionalProperties": {
+        "properties":{
+            "attachmentUrl":{
+                "type":"string"
+            }
+        }
+    }
   }
   

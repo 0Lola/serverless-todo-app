@@ -82,6 +82,9 @@ functions:
           path: todos
           cors: true
           authorizer: Auth
+          request:
+            schema:
+              application/json: ${file(src/schema/create-todo-model.json)}
     iamRoleStatements:
       - Effect: Allow
         Action:
@@ -96,6 +99,9 @@ functions:
           path: todos/{todoId}
           cors: true
           authorizer: Auth
+          request:
+            schema:
+              application/json: ${file(src/schema/update-todo-model.json)}
     iamRoleStatements:
       - Effect: Allow
         Action:

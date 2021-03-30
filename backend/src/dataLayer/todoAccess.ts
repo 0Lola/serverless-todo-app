@@ -1,5 +1,5 @@
-import { UpdateTodoRequest } from './../../../client/src/types/UpdateTodoRequest';
-import { TodoItem } from './../models/TodoItem';
+import { UpdateTodoRequest } from '../../../client/src/types/UpdateTodoRequest';
+import { TodoItem } from '../models/TodoItem';
 import * as AWS from 'aws-sdk'
 import * as AWSXRay from 'aws-xray-sdk'
 import { DocumentClient } from 'aws-sdk/clients/dynamodb'
@@ -7,8 +7,9 @@ import { DocumentClient } from 'aws-sdk/clients/dynamodb'
 const XAWS = AWSXRay.captureAWS(AWS)
 const TODO_TABLE = process.env.TODO_TABLE;
 const USER_ID_INDEX = process.env.USER_ID_INDEX;
+const IMAGE_BUCKET = process.env.IMAGE_BUCKET
 
-export class DB {
+export class TodoAccess {
 
     constructor(
         private readonly db: DocumentClient = createDynamoDBClient()) {
@@ -75,8 +76,9 @@ export class DB {
         return newTodo
     }
 
-    async updateTodoItemAttachmentUrl(userId: string, todoId: string, attachmentUrl: string): Promise<any> {
+    async updateTodoItemAttachmentUrl(userId: string, todoId: string, imageId: string): Promise<any> {
 
+        const attachmentUrl = `https://${IMAGE_BUCKET}.s3.amazonaws.com/${imageId}`
         const newTodo = await this.db.update({
             TableName: TODO_TABLE,
             Key: {
@@ -100,10 +102,10 @@ export class DB {
 
         console.log(`updateTodoItemAttachmentUrl response: ${JSON.stringify(newTodo)}`)
 
-        return newTodo;
+        return imageId;
     }
 
-    async deleteTodoItem(todoId: string, userId: string): Promise<string> {
+    async deleteTodoItem(userId:string,todoId: string): Promise<string> {
         await this.db.delete({
             TableName: TODO_TABLE,
             Key: {
@@ -116,7 +118,7 @@ export class DB {
         return todoId
     }
 
-    async todoIsExists(todoId: string, userId: string): Promise<boolean> {
+    async todoIsExists(userId: string, todoId: string): Promise<boolean> {
         const result = await this.db.get({
             TableName: TODO_TABLE,
             Key: {

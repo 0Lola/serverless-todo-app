@@ -4,13 +4,12 @@ import * as middy from 'middy'
 import { cors } from 'middy/middlewares'
 import { APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda'
 import { createLogger } from '../../utils/logger'
-import { DB } from '../../utils/db'
 import { S3 } from '../../utils/s3'
 import { parseUserId } from '../../auth/utils'
+import { todoIsExists, updateTodoItemAttachmentUrl } from '../../businessLogic/todo'
+import { getUploadUrl } from '../../businessLogic/image'
 
-const db = new DB()
 const s3 = new S3()
-const IMAGE_BUCKET = process.env.IMAGE_BUCKET
 
 const logger = createLogger('auth')
 
@@ -20,7 +19,7 @@ export const handler = middy(async (event: APIGatewayProxyEvent): Promise<APIGat
     const userId = parseUserId(token)
     const todoId = event.pathParameters.todoId
     logger.info(`generateUploadUrl todoId : ${todoId}`)
-    const valid = await db.todoIsExists(todoId,userId)
+    const valid = await todoIsExists(todoId,userId)
 
     if (!valid) {
         return {
@@ -32,10 +31,9 @@ export const handler = middy(async (event: APIGatewayProxyEvent): Promise<APIGat
     }
     
 
-    const imageId = uuid.v4()
-    await db.updateTodoItemAttachmentUrl(userId,todoId, `https://${IMAGE_BUCKET}.s3.amazonaws.com/${imageId}`)
+    const imageId = await updateTodoItemAttachmentUrl(userId,todoId)
 
-    const uploadUrl = s3.getUploadUrl(imageId)
+    const uploadUrl = getUploadUrl(imageId)
     logger.info(`generateUploadUrl uploadUrl : ${uploadUrl}`)
 
     return {

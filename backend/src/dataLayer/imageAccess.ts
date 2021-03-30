@@ -9,7 +9,7 @@ const s3 = new XAWS.S3({
     signatureVersion: 'v4'
 })
 
-export class S3 {
+export class ImageAccess {
 
     constructor() { }
 

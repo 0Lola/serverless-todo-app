@@ -1,11 +1,10 @@
 import 'source-map-support/register'
 
 import { APIGatewayProxyEvent, APIGatewayProxyResult, APIGatewayProxyHandler } from 'aws-lambda'
-import { DB } from '../../utils/db';
 import { createLogger } from '../../utils/logger'
 import { parseUserId } from '../../auth/utils';
+import { deleteTodoItem } from '../../businessLogic/todo';
 
-const db = new DB();
 const logger = createLogger('auth')
 
 export const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
@@ -13,7 +12,7 @@ export const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEven
     const split = event.headers.Authorization.split(' ')
     const token = split[1]
     const userId = parseUserId(token)
-    const item = await db.deleteTodoItem(todoId,userId)
+    const item = await deleteTodoItem(todoId,userId)
 
     logger.info(`deleteTodo : ${todoId}`);
 

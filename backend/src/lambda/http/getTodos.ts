@@ -1,11 +1,10 @@
 import { TodoItem } from './../../models/TodoItem';
-import { DB } from './../../utils/db';
 import { APIGatewayProxyEvent, APIGatewayProxyResult, APIGatewayProxyHandler } from 'aws-lambda'
 import 'source-map-support/register'
 import { parseUserId } from '../../auth/utils';
 import { createLogger } from '../../utils/logger'
+import { getAllTodoItemsByToken } from '../../businessLogic/todo';
 
-const db = new DB();
 const logger = createLogger('auth')
 
 export const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
@@ -14,7 +13,7 @@ export const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEven
     const userId = parseUserId(token)
     logger.info(`getTodos by token:${JSON.stringify(event)}`)
 
-    const items = await db.getAllTodoItemsByToken(userId) as TodoItem[]
+    const items = await getAllTodoItemsByToken(userId) as TodoItem[]
 
     return {
         statusCode: 200,
