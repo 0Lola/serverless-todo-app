@@ -5,9 +5,7 @@ plugins:
   - serverless-webpack
   - serverless-offline
   - serverless-plugin-canary-deployments
-  # - serverless-iam-roles-per-function
   - serverless-iamroles
-
 
 provider:
 

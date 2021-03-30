@@ -103,11 +103,12 @@ export class DB {
         return newTodo;
     }
 
-    async deleteTodoItem(todoId: string): Promise<string> {
+    async deleteTodoItem(todoId: string, userId: string): Promise<string> {
         await this.db.delete({
             TableName: TODO_TABLE,
             Key: {
-                todoId: todoId
+                todoId: todoId,
+                userId: userId
             }
         }).promise()
 
