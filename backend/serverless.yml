@@ -38,10 +38,10 @@ provider:
         - dynamodb:UpdateItem
         - dynamodb:DeleteItem
       Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.TODO_TABLE}
-    - Effect: Allow
-      Action:
-        - dynamodb:Query
-      Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.TODO_TABLE}/index/${self:provider.environment.USER_ID_INDEX}
+    # - Effect: Allow
+      # Action:
+        # - dynamodb:Query
+      # Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.TODO_TABLE}/index/${self:provider.environment.USER_ID_INDEX}
     - Effect: Allow
       Action:
         - secretsmanager:GetSecretValue
@@ -64,6 +64,9 @@ custom:
       inMemory: true
       migrate: true
 
+  serverless-iam-roles-per-function:
+    defaultInherit: true
+
 functions:
   Auth:
     handler: src/lambda/auth/auth0Authorizer.handler
@@ -76,12 +79,12 @@ functions:
           path: todos
           cors: true
           authorizer: Auth
-    # iamRoleStatements:
-    #   - Effect: Allow
-    #     Action:
-    #       - dynamodb:Query
-    #     Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.TODO_TABLE}/index/${self:provider.environment.USER_ID_INDEX}
-
+    iamRoleStatements:
+      - Effect: "Allow"
+        Action:
+          - dynamodb:Query
+        Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.TODO_TABLE}/index/${self:provider.environment.USER_ID_INDEX}
+   
   CreateTodo:
     handler: src/lambda/http/createTodo.handler
     events:
@@ -186,15 +189,6 @@ resources:
               KeyType: HASH
             Projection:
               ProjectionType: ALL
-
-    RequestBodyValidator:
-      Type: AWS::ApiGateway::RequestValidator
-      Properties:
-        Name: request-body-validator
-        RestApiId:
-          Ref: ApiGatewayRestApi
-        ValidateRequestBody: true
-        ValidateRequestParameters: false
 
     AttachmentsBucket:
       Type: AWS::S3::Bucket
