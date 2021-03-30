@@ -15,7 +15,7 @@ export const handler = middy(async (event: APIGatewayProxyEvent): Promise<APIGat
     const userId = parseUserId(token)
     const todoId = event.pathParameters.todoId
     logger.info(`generateUploadUrl todoId : ${todoId}`)
-    const valid = await todoIsExists(todoId,userId)
+    const valid = await todoIsExists(userId,todoId)
 
     if (!valid) {
         return {
