@@ -18,15 +18,6 @@ export class DB {
 
     // Todo
 
-    async getAllTodoItems(): Promise<TodoItem[]> {
-        const result = await this.db.scan({
-            TableName: TODO_TABLE
-        }).promise()
-        const items = result.Items
-        console.log(`getAllTodoItems response: ${items}`)
-        return items as TodoItem[]
-    }
-
     async getAllTodoItemsByToken(jwtToken: string): Promise<TodoItem[]> {
 
         const result = await this.db.query({
