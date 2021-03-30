@@ -4,8 +4,6 @@ service:
 plugins:
   - serverless-webpack
   - serverless-iam-roles-per-function
-  - serverless-reqvalidator-plugin
-  - serverless-aws-documentation
   - serverless-offline
   - serverless-plugin-canary-deployments
 
@@ -22,9 +20,7 @@ provider:
     region: ${opt:region, 'us-east-1'}
     TODO_TABLE: Todos
     USER_ID_INDEX: UserIdIndex
-    # IMAGE_TABLE: Image
     IMAGE_BUCKET: serverless-s3-images-zxa011023
-    # IMAGE_ID_INDEX: ImageIdIndex
     SIGNED_URL_EXPIRATION: 3000
     AUTH_0_SECRET_ID: Auth0Secret-${self:provider.stage}
     AUTH_0_SECRET_FIELD: auth0Secret
@@ -46,20 +42,6 @@ provider:
       Action:
         - dynamodb:Query
       Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.TODO_TABLE}/index/${self:provider.environment.USER_ID_INDEX}
-    # - Effect: Allow
-    #   Action:
-    #     - dynamodb:PutItem
-    #     - dynamodb:Query
-    #   Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.IMAGE_TABLE}
-    # - Effect: Allow
-    #   Action:
-    #     - dynamodb:Query
-    #   Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.IMAGE_TABLE}/index/${self:provider.environment.IMAGE_ID_INDEX}
-    # - Effect: Allow
-    #   Action:
-    #     - s3:PutObject
-    #     - s3:GetObject
-    #   Resource: arn:aws:s3:::${self:provider.environment.IMAGE_BUCKET}/*
     - Effect: Allow
       Action:
         - secretsmanager:GetSecretValue
@@ -81,20 +63,6 @@ custom:
       port: 8000
       inMemory: true
       migrate: true
-
-  documentation:
-    api:
-      info:
-        version: '2.0.0'
-        title: Serverless REST API
-        description: Serverless application for REST API
-    models:
-      - name: CreateTodoRequest
-        contentType: application/json
-        schema: ${file(src/validation/create-todo-request.json)}
-      - name: UpdateTodoRequest
-        contentType: application/json
-        schema: ${file(src/validation/update-todo-request.json)}
 
 functions:
   Auth:
@@ -123,11 +91,6 @@ functions:
           cors: true
           authorizer: Auth
           reqValidatorName: RequestBodyValidator
-          documentation:
-            summary: Create a new Todo
-            description: Create a new Todo
-            requestModels:
-              'application/json': CreateTodoRequest
     # iamRoleStatements:
     #   - Effect: Allow
     #     Action:
@@ -142,12 +105,6 @@ functions:
           path: todos/{todoId}
           cors: true
           authorizer: Auth
-          reqValidatorName: RequestBodyValidator
-          documentation:
-            summary: Update a new Todo
-            description: Update a new Todo
-            requestModels:
-              'application/json': UpdateTodoRequest
     # iamRoleStatements:
     #   - Effect: Allow
     #     Action:
