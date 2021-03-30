@@ -85,6 +85,7 @@ custom:
   documentation:
     api:
       info:
+        version: 1.0.0
         title: Serverless REST API
         description: Serverless application for REST API
     models:
