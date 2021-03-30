@@ -7,7 +7,7 @@ plugins:
   - serverless-reqvalidator-plugin
   - serverless-aws-documentation
   - serverless-offline
-  - serverless-dynamodb-local
+  # - serverless-dynamodb-local
   - serverless-plugin-canary-deployments
 
 package:
