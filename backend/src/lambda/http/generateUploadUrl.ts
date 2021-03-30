@@ -1,4 +1,5 @@
 import 'source-map-support/register'
+import * as uuid from 'uuid'
 import * as middy from 'middy'
 import { cors } from 'middy/middlewares'
 import { APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda'
@@ -26,8 +27,8 @@ export const handler = middy(async (event: APIGatewayProxyEvent): Promise<APIGat
         }
     }
     
-
-    const imageId = await updateTodoItemAttachmentUrl(userId,todoId)
+    const imageId = uuid.v4()
+    await updateTodoItemAttachmentUrl(userId,todoId,imageId)
     logger.info(`attachmentUrl imageId : ${imageId}`)
 
     const uploadUrl = getUploadUrl(imageId)

@@ -26,8 +26,7 @@ export async function updateTodoItem(userId: string, todoId: string, item: Updat
   return await todoAccess.updateTodoItem(userId,todoId,item)
 }
 
-export async function updateTodoItemAttachmentUrl(userId: string, todoId: string): Promise<string> {
-    const imageId = uuid.v4()
+export async function updateTodoItemAttachmentUrl(userId: string, todoId: string, imageId: string): Promise<string> {
     return await todoAccess.updateTodoItemAttachmentUrl(userId,todoId,imageId)
 }
 
