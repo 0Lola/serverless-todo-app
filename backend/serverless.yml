@@ -219,10 +219,10 @@ resources:
             AttributeType: BOOL
           - AttributeName: attachmentUrl
             AttributeType: S
+          - AttributeName: createdAt
+            AttributeType: S
         KeySchema:
           - AttributeName: todoId
-            KeyType: HASH
-          - AttributeName: userId
             KeyType: HASH
         BillingMode: PAY_PER_REQUEST
         StreamSpecification:
