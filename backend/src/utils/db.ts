@@ -6,8 +6,8 @@ import { DocumentClient } from 'aws-sdk/clients/dynamodb'
 
 const XAWS = AWSXRay.captureAWS(AWS)
 const TODO_TABLE = process.env.TODO_TABLE;
-const IMAGE_TABLE = process.env.IMAGE_TABLE;
-const IMAGE_BUCKET = process.env.IMAGE_BUCKET;
+// const IMAGE_TABLE = process.env.IMAGE_TABLE;
+// const IMAGE_BUCKET = process.env.IMAGE_BUCKET;
 const USER_ID_INDEX = process.env.USER_ID_INDEX;
 
 export class DB {
@@ -96,7 +96,7 @@ export class DB {
             ReturnValues: "UPDATED_NEW"
         }).promise();
 
-        console.log(`updateTodoItemAttachmentUrl response: ${newTodo}`)
+        console.log(`updateTodoItemAttachmentUrl response: ${JSON.stringify(newTodo)}`)
 
         return newTodo;
     }
@@ -129,25 +129,25 @@ export class DB {
 
     // Image
 
-    async createImage(id: string, imageId: string): Promise<any> {
-        const timestamp = new Date().toISOString()
+    // async createImage(id: string, imageId: string): Promise<any> {
+    //     const timestamp = new Date().toISOString()
 
-        const image = {
-            id,
-            timestamp,
-            imageId,
-            imageUrl: `https://${IMAGE_BUCKET}.s3.amazonaws.com/${imageId}`
-        }
+    //     const image = {
+    //         id,
+    //         timestamp,
+    //         imageId,
+    //         imageUrl: `https://${IMAGE_BUCKET}.s3.amazonaws.com/${imageId}`
+    //     }
 
-        const newImage = await this.db
-            .put({
-                TableName: IMAGE_TABLE,
-                Item: image
-            }).promise()
-        console.log(`createImage response: ${JSON.stringify(newImage)}`)
+    //     const newImage = await this.db
+    //         .put({
+    //             TableName: IMAGE_TABLE,
+    //             Item: image
+    //         }).promise()
+    //     console.log(`createImage response: ${JSON.stringify(newImage)}`)
 
-        return image
-    }
+    //     return image
+    // }
 }
 
 // offline

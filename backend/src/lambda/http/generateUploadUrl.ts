@@ -10,6 +10,7 @@ import { S3 } from '../../utils/s3'
 const db = new DB()
 const s3 = new S3()
 const logger = createLogger('auth')
+const IMAGE_BUCKET = process.env.IMAGE_BUCKET;
 
 export const handler = middy(async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
     const todoId = event.pathParameters.todoId
@@ -26,8 +27,8 @@ export const handler = middy(async (event: APIGatewayProxyEvent): Promise<APIGat
     }
 
     const imageId = uuid.v4()
-    const image = await db.createImage(todoId, imageId)
-    await db.updateTodoItemAttachmentUrl(todoId,image.imageUrl)
+    // const image = await db.createImage(todoId, imageId)
+    await db.updateTodoItemAttachmentUrl(todoId,`https://${IMAGE_BUCKET}.s3.amazonaws.com/${imageId}`)
 
     const uploadUrl = s3.getUploadImage(imageId)
     logger.info(`generateUploadUrl uploadUrl : ${uploadUrl}`)
