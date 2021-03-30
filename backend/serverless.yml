@@ -26,7 +26,6 @@ provider:
     IMAGE_BUCKET: serverless-s3-images-zxa011023
     IMAGE_ID_INDEX: ImageIdIndex
     SIGNED_URL_EXPIRATION: 3000
-    THUMBNAILS_BUCKET: serverless-thumbnail-${self:provider.stage}
     AUTH_0_SECRET_ID: Auth0Secret-${self:provider.stage}
     AUTH_0_SECRET_FIELD: auth0Secret
 
@@ -140,6 +139,12 @@ functions:
           path: todos/{todoId}
           cors: true
           authorizer: Auth
+          reqValidatorName: RequestBodyValidator
+          documentation:
+            summary: Update a new Todo
+            description: Update a new Todo
+            requestModels:
+              'application/json': UpdateTodoRequest
     # iamRoleStatements:
     #   - Effect: Allow
     #     Action:
