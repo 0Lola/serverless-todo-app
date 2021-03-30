@@ -22,9 +22,9 @@ provider:
     region: ${opt:region, 'us-east-1'}
     TODO_TABLE: Todos
     USER_ID_INDEX: UserIdIndex
-    IMAGE_TABLE: Image
+    # IMAGE_TABLE: Image
     IMAGE_BUCKET: serverless-s3-images-zxa011023
-    IMAGE_ID_INDEX: ImageIdIndex
+    # IMAGE_ID_INDEX: ImageIdIndex
     SIGNED_URL_EXPIRATION: 3000
     AUTH_0_SECRET_ID: Auth0Secret-${self:provider.stage}
     AUTH_0_SECRET_FIELD: auth0Secret
@@ -70,18 +70,21 @@ provider:
       Resource: !GetAtt KMSKey.Arn
 
 custom:
+
   topicName: ServerlessTodoTopic
+
   serverless-offline:
     port: 3003
+
   dynamodb:
     start:
       port: 8000
       inMemory: true
       migrate: true
+
   documentation:
     api:
       info:
-        version: v1.0.0
         title: Serverless REST API
         description: Serverless application for REST API
     models:
@@ -265,7 +268,7 @@ resources:
     RequestBodyValidator:
       Type: AWS::ApiGateway::RequestValidator
       Properties:
-        Name: 'request-body-validator'
+        Name: request-body-validator
         RestApiId:
           Ref: ApiGatewayRestApi
         ValidateRequestBody: true
