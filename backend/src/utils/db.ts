@@ -84,7 +84,7 @@ export class DB {
                 userId: userId
             },
             UpdateExpression: 'SET #a = :attachmentUrl',
-            ConditionExpression: '#t = :todoId, #u =:userId',
+            ConditionExpression: '#t = :todoId AND #u =:userId',
             ExpressionAttributeValues: {
                 ':todoId': todoId,
                 ':userId': userId,
