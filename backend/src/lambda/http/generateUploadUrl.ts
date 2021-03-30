@@ -15,7 +15,6 @@ const logger = createLogger('auth')
 const IMAGE_BUCKET = process.env.IMAGE_BUCKET;
 
 // test
-const bucketName = process.env.IMAGES_S3_BUCKET
 const urlExpiration = process.env.SIGNED_URL_EXPIRATION
 const XAWS = AWSXRay.captureAWS(AWS)
 const s3 = new XAWS.S3({
@@ -64,7 +63,7 @@ handler.use(
 
 function getUploadUrl(imageId: string) {
     return s3.getSignedUrl('putObject', {
-        Bucket: bucketName,
+        Bucket: IMAGE_BUCKET,
         Key: imageId,
         Expires: urlExpiration
     })
