@@ -228,7 +228,7 @@ resources:
           - AttributeName: todoId
             KeyType: HASH
           - AttributeName: timestamp
-            AttributeType: RANGE
+            KeyType: RANGE
         BillingMode: PAY_PER_REQUEST
         StreamSpecification:
           StreamViewType: NEW_IMAGE
