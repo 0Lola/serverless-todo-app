@@ -221,7 +221,7 @@ resources:
           - AttributeName: dueDate
             AttributeType: S
           - AttributeName: done
-            AttributeType: BOOL
+            AttributeType: B
           - AttributeName: attachmentUrl
             AttributeType: S
           - AttributeName: createdAt
