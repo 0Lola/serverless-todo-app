@@ -13,7 +13,7 @@ export class S3 {
 
     constructor() { }
 
-    getUploadImage(imageId: string) {
+    getUploadUrl(imageId: string) {
         return s3.getSignedUrl('putObject', {
             Bucket: IMAGE_BUCKET,
             Key: imageId,
