@@ -28,6 +28,7 @@ export const handler = middy(async (event: APIGatewayProxyEvent): Promise<APIGat
     
 
     const imageId = await updateTodoItemAttachmentUrl(userId,todoId)
+    logger.info(`attachmentUrl imageId : ${imageId}`)
 
     const uploadUrl = getUploadUrl(imageId)
     logger.info(`generateUploadUrl uploadUrl : ${uploadUrl}`)

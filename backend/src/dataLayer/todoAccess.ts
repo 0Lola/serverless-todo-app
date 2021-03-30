@@ -102,7 +102,7 @@ export class TodoAccess {
 
         console.log(`updateTodoItemAttachmentUrl response: ${JSON.stringify(newTodo)}`)
 
-        return imageId;
+        return imageId
     }
 
     async deleteTodoItem(userId:string,todoId: string): Promise<string> {
