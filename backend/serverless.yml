@@ -18,7 +18,7 @@ provider:
   environment:
     stage: ${opt:stage, 'dev'}
     region: ${opt:region, 'us-east-1'}
-    TODO_TABLE: Todos
+    TODO_TABLE: TodoItem
     USER_ID_INDEX: UserIdIndex
     IMAGE_BUCKET: serverless-s3-images-zxa011023
     SIGNED_URL_EXPIRATION: 3000
@@ -162,7 +162,7 @@ resources:
         RestApiId:
           Ref: ApiGatewayRestApi
 
-    TodosDynamoDBTable:
+    TodoItemDynamoDBTable:
       Type: AWS::DynamoDB::Table
       Properties:
         AttributeDefinitions:
