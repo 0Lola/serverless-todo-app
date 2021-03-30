@@ -29,8 +29,8 @@ export const handler = middy(async (event: APIGatewayProxyEvent): Promise<APIGat
     const image = await db.createImage(todoId, imageId)
     await db.updateTodoItemAttachmentUrl(todoId,image.imageUrl)
 
-    const imageItem = s3.getUploadImageItem(imageId)
-    logger.info(`generateUploadUrl uploadUrl : ${JSON.stringify(imageItem.uploadUrl)}`)
+    const uploadUrl = s3.getUploadImage(imageId)
+    logger.info(`generateUploadUrl uploadUrl : ${uploadUrl}`)
 
     return {
         statusCode: 201,
@@ -39,7 +39,7 @@ export const handler = middy(async (event: APIGatewayProxyEvent): Promise<APIGat
             'Access-Control-Allow-Credentials': true
         },
         body:JSON.stringify({
-            uploadUrl: imageItem.uploadUrl
+            uploadUrl
         })
     }
 })
