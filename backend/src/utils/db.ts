@@ -52,7 +52,7 @@ export class DB {
                 userId: userId
             },
             UpdateExpression: 'SET #n = :name, #dd = :dueDate, #d = :done',
-            ConditionExpression: '#t = :todoId, #u = :userId',
+            ConditionExpression: '#t = :todoId AND #u = :userId',
             ExpressionAttributeValues: {
                 ':todoId': todoId,
                 ':userId': userId,
