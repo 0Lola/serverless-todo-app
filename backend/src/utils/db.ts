@@ -150,7 +150,6 @@ export class DB {
     // }
 }
 
-// offline
 function createDynamoDBClient() {
     if (process.env.IS_OFFLINE) {
         console.log('Creating a local DynamoDB instance')
