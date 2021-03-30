@@ -3,6 +3,7 @@ import { APIGatewayProxyEvent, APIGatewayProxyHandler, APIGatewayProxyResult } f
 import { UpdateTodoRequest } from '../../requests/UpdateTodoRequest'
 import { DB } from '../../utils/db'
 import { createLogger } from '../../utils/logger'
+import { parseUserId } from '../../auth/utils'
 
 const db = new DB();
 const logger = createLogger('auth')
@@ -10,7 +11,10 @@ const logger = createLogger('auth')
 export const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
     const todoId = event.pathParameters.todoId
     const todo: UpdateTodoRequest = JSON.parse(event.body)
-    const item = await db.updateTodoItem(todoId,todo)
+    const split = event.headers.Authorization.split(' ')
+    const token = split[1]
+    const userId = parseUserId(token)
+    const item = await db.updateTodoItem(userId,todoId,todo)
     
     logger.info(`updateTodo :${JSON.stringify(item)}`)
 

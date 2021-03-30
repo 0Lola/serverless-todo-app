@@ -6,8 +6,6 @@ import { DocumentClient } from 'aws-sdk/clients/dynamodb'
 
 const XAWS = AWSXRay.captureAWS(AWS)
 const TODO_TABLE = process.env.TODO_TABLE;
-// const IMAGE_TABLE = process.env.IMAGE_TABLE;
-// const IMAGE_BUCKET = process.env.IMAGE_BUCKET;
 const USER_ID_INDEX = process.env.USER_ID_INDEX;
 
 export class DB {
@@ -15,8 +13,6 @@ export class DB {
     constructor(
         private readonly db: DocumentClient = createDynamoDBClient()) {
     }
-
-    // Todo
 
     async getAllTodoItemsByToken(jwtToken: string): Promise<TodoItem[]> {
 
@@ -48,7 +44,7 @@ export class DB {
         return item
     }
 
-    async updateTodoItem(userId:string, todoId: string, item: UpdateTodoRequest): Promise<any> {
+    async updateTodoItem(userId: string, todoId: string, item: UpdateTodoRequest): Promise<any> {
         const newTodo = await this.db.update({
             TableName: TODO_TABLE,
             Key: {
@@ -56,18 +52,20 @@ export class DB {
                 userId: userId
             },
             UpdateExpression: 'SET #n = :name, #dd = :dueDate, #d = :done',
-            ConditionExpression: '#t = :todoId',
+            ConditionExpression: '#t = :todoId, #u = :userId',
             ExpressionAttributeValues: {
                 ':todoId': todoId,
+                ':userId': userId,
                 ':name': item.name,
                 ':dueDate': item.dueDate,
-                ':done': item.done,
+                ':done': item.done
             },
-            ExpressionAttributeNames:{
+            ExpressionAttributeNames: {
+                '#t': 'todoId',
+                '#u': 'userId',
                 '#n': 'name',
                 '#dd': 'dueDate',
                 '#d': 'done',
-                '#t': 'todoId',
             },
             ReturnValues: "UPDATED_NEW"
         }).promise()
@@ -77,22 +75,25 @@ export class DB {
         return newTodo
     }
 
-    async updateTodoItemAttachmentUrl(todoId: string, attachmentUrl: string): Promise<any> {
+    async updateTodoItemAttachmentUrl(userId: string, todoId: string, attachmentUrl: string): Promise<any> {
 
         const newTodo = await this.db.update({
             TableName: TODO_TABLE,
             Key: {
-                todoId: todoId
+                todoId: todoId,
+                userId: userId
             },
             UpdateExpression: 'SET #a = :attachmentUrl',
-            ConditionExpression: '#t = :todoId',
+            ConditionExpression: '#t = :todoId, #u =:userId',
             ExpressionAttributeValues: {
                 ':todoId': todoId,
+                ':userId': userId,
                 ':attachmentUrl': attachmentUrl,
             },
-            ExpressionAttributeNames:{
-                '#a': 'attachmentUrl',
-                '#t': 'todoId'
+            ExpressionAttributeNames: {
+                '#t': 'todoId',
+                '#u': 'userId',
+                '#a': 'attachmentUrl'
             },
             ReturnValues: "UPDATED_NEW"
         }).promise();

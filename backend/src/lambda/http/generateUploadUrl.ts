@@ -6,6 +6,7 @@ import { APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda'
 import { createLogger } from '../../utils/logger'
 import { DB } from '../../utils/db'
 import { S3 } from '../../utils/s3'
+import { parseUserId } from '../../auth/utils'
 
 const db = new DB()
 const s3 = new S3()
@@ -26,10 +27,12 @@ export const handler = middy(async (event: APIGatewayProxyEvent): Promise<APIGat
             })
         }
     }
-
+    
+    const split = event.headers.Authorization.split(' ')
+    const token = split[1]
+    const userId = parseUserId(token)
     const imageId = uuid.v4()
-    // const image = await db.createImage(todoId, imageId)
-    await db.updateTodoItemAttachmentUrl(todoId, `https://${IMAGE_BUCKET}.s3.amazonaws.com/${imageId}`)
+    await db.updateTodoItemAttachmentUrl(userId,todoId, `https://${IMAGE_BUCKET}.s3.amazonaws.com/${imageId}`)
 
     const uploadUrl = s3.getUploadUrl(imageId)
     logger.info(`generateUploadUrl uploadUrl : ${uploadUrl}`)
