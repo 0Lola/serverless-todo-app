@@ -116,11 +116,12 @@ export class DB {
         return todoId
     }
 
-    async todoIsExists(todoId: string): Promise<boolean> {
+    async todoIsExists(todoId: string, userId: string): Promise<boolean> {
         const result = await this.db.get({
             TableName: TODO_TABLE,
             Key: {
-                todoId: todoId
+                todoId: todoId,
+                userId: userId
             }
         }).promise()
 

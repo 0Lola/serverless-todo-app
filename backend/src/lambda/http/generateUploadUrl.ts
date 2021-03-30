@@ -15,9 +15,12 @@ const IMAGE_BUCKET = process.env.IMAGE_BUCKET
 const logger = createLogger('auth')
 
 export const handler = middy(async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
+    const split = event.headers.Authorization.split(' ')
+    const token = split[1]
+    const userId = parseUserId(token)
     const todoId = event.pathParameters.todoId
     logger.info(`generateUploadUrl todoId : ${todoId}`)
-    const valid = await db.todoIsExists(todoId)
+    const valid = await db.todoIsExists(todoId,userId)
 
     if (!valid) {
         return {
@@ -28,9 +31,7 @@ export const handler = middy(async (event: APIGatewayProxyEvent): Promise<APIGat
         }
     }
     
-    const split = event.headers.Authorization.split(' ')
-    const token = split[1]
-    const userId = parseUserId(token)
+
     const imageId = uuid.v4()
     await db.updateTodoItemAttachmentUrl(userId,todoId, `https://${IMAGE_BUCKET}.s3.amazonaws.com/${imageId}`)
 
