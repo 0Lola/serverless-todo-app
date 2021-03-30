@@ -48,11 +48,12 @@ export class DB {
         return item
     }
 
-    async updateTodoItem(todoId: string, item: UpdateTodoRequest): Promise<any> {
+    async updateTodoItem(userId:string, todoId: string, item: UpdateTodoRequest): Promise<any> {
         const newTodo = await this.db.update({
             TableName: TODO_TABLE,
             Key: {
-                todoId: todoId
+                todoId: todoId,
+                userId: userId
             },
             UpdateExpression: 'SET #n = :name, #dd = :dueDate, #d = :done',
             ConditionExpression: '#t = :todoId',
