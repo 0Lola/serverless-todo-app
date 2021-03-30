@@ -9,9 +9,6 @@ plugins:
   - serverless-offline
   - serverless-plugin-canary-deployments
 
-package:
-  individually: true
-
 provider:
 
   tracing:
