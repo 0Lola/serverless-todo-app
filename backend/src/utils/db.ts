@@ -146,7 +146,7 @@ export class DB {
             }).promise()
         console.log(`createImage response: ${JSON.stringify(newImage)}`)
 
-        return newImage
+        return image
     }
 }
 
