@@ -2,6 +2,6 @@ import { ImageAccess } from './../dataLayer/imageAccess';
 
 const imageAccess = new ImageAccess()
 
-export async function getUploadUrl(imageId: string): Promise<string> {
+export function getUploadUrl(imageId: string): string {
     return imageAccess.getUploadUrl(imageId)
 }
