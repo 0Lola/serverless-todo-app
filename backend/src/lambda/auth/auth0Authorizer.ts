@@ -9,10 +9,6 @@ import { parseUserId } from '../../auth/utils'
 
 const logger = createLogger('auth')
 
-// import Axios from 'axios'
-// Auth0 JSON Web Key Set
-// const jwksUrl = 'https://udacity-serverless-zxa011023.us.auth0.com/.well-known/jwks.json'
-// const secret = 'o0kvHInIfOxAxK7nMkGIfBJ739FV6_2hCOWKudEcw-oT399uGGfzA0wCyHPYCOEN'
 const secretId = process.env.AUTH_0_SECRET_ID
 const secretField = process.env.AUTH_0_SECRET_FIELD
 
@@ -73,7 +69,6 @@ handler.use(
       awsSdkOptions: { region: 'us-east-1' },
       cache: true,
       cacheExpiryInMillis: 60000,
-      // Throw an error if can't read the secret
       throwOnFailedCall: true,
       secrets: {
         AUTH0_SECRET: secretId
