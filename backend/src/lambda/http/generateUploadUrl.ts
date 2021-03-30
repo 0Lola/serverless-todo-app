@@ -1,15 +1,11 @@
 import 'source-map-support/register'
-import * as uuid from 'uuid'
 import * as middy from 'middy'
 import { cors } from 'middy/middlewares'
 import { APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda'
 import { createLogger } from '../../utils/logger'
-import { S3 } from '../../utils/s3'
 import { parseUserId } from '../../auth/utils'
 import { todoIsExists, updateTodoItemAttachmentUrl } from '../../businessLogic/todo'
 import { getUploadUrl } from '../../businessLogic/image'
-
-const s3 = new S3()
 
 const logger = createLogger('auth')
 
