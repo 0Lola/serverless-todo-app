@@ -23,9 +23,6 @@
       },
       "attachmentUrl": {
         "type": "string"
-      },
-      "timestamp": {
-        "type": "string"
       }
     },
     "required": [

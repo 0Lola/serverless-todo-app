@@ -127,27 +127,6 @@ export class DB {
         return isExist
     }
 
-    // Image
-
-    // async createImage(id: string, imageId: string): Promise<any> {
-    //     const timestamp = new Date().toISOString()
-
-    //     const image = {
-    //         id,
-    //         timestamp,
-    //         imageId,
-    //         imageUrl: `https://${IMAGE_BUCKET}.s3.amazonaws.com/${imageId}`
-    //     }
-
-    //     const newImage = await this.db
-    //         .put({
-    //             TableName: IMAGE_TABLE,
-    //             Item: image
-    //         }).promise()
-    //     console.log(`createImage response: ${JSON.stringify(newImage)}`)
-
-    //     return image
-    // }
 }
 
 function createDynamoDBClient() {

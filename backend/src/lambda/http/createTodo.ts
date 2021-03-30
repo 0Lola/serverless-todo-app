@@ -44,8 +44,7 @@ export async function create(
         createdAt: `${date.getFullYear()}-${date.getMonth()+1}-${date.getDate()}`,
         name: body.name,
         dueDate: body.dueDate,
-        done: false,
-        timestamp: new Date().toISOString()
+        done: false
     })
 }
 

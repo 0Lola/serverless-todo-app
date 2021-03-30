@@ -90,7 +90,6 @@ functions:
           path: todos
           cors: true
           authorizer: Auth
-          reqValidatorName: RequestBodyValidator
     # iamRoleStatements:
     #   - Effect: Allow
     #     Action:
@@ -110,12 +109,6 @@ functions:
     #     Action:
     #       - dynamodb:UpdateItem
     #     Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.TODO_TABLE}
-          # reqValidatorName: RequestBodyValidator
-          # documentation:
-          #   summary: Update a Todo
-          #   description: Update a Todo
-          #   requestModels:
-          #     'application/json': UpdateTodoRequest
 
   DeleteTodo:
     handler: src/lambda/http/deleteTodo.handler
@@ -177,13 +170,11 @@ resources:
             AttributeType: S
           - AttributeName: userId
             AttributeType: S
-          - AttributeName: timestamp
-            AttributeType: S
         KeySchema:
           - AttributeName: todoId
             KeyType: HASH
-          - AttributeName: timestamp
-            KeyType: RANGE
+          - AttributeName: userId
+            KeyType: HASH
         BillingMode: PAY_PER_REQUEST
         StreamSpecification:
           StreamViewType: NEW_IMAGE
@@ -195,33 +186,6 @@ resources:
               KeyType: HASH
             Projection:
               ProjectionType: ALL
-
-    # ImageDynamoDBTable:
-    #   Type: AWS::DynamoDB::Table
-    #   Properties:
-    #     AttributeDefinitions:
-    #       - AttributeName: id
-    #         AttributeType: S
-    #       - AttributeName: timestamp
-    #         AttributeType: S
-    #       - AttributeName: imageId
-    #         AttributeType: S
-    #     KeySchema:
-    #       - AttributeName: id
-    #         KeyType: HASH
-    #       - AttributeName: timestamp
-    #         KeyType: RANGE
-    #     BillingMode: PAY_PER_REQUEST
-    #     StreamSpecification:
-    #       StreamViewType: NEW_IMAGE
-    #     TableName: ${self:provider.environment.IMAGE_TABLE}
-    #     GlobalSecondaryIndexes:
-    #       - IndexName: ${self:provider.environment.IMAGE_ID_INDEX}
-    #         KeySchema:
-    #         - AttributeName: imageId
-    #           KeyType: HASH
-    #         Projection:
-    #           ProjectionType: ALL
 
     RequestBodyValidator:
       Type: AWS::ApiGateway::RequestValidator
