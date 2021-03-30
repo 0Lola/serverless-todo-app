@@ -216,16 +216,6 @@ resources:
             AttributeType: S
           - AttributeName: userId
             AttributeType: S
-          - AttributeName: name
-            AttributeType: S
-          - AttributeName: dueDate
-            AttributeType: S
-          - AttributeName: done
-            AttributeType: B
-          - AttributeName: attachmentUrl
-            AttributeType: S
-          - AttributeName: createdAt
-            AttributeType: S
           - AttributeName: timestamp
             AttributeType: S
         KeySchema:
