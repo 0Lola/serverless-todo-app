@@ -8,7 +8,10 @@ export const handler = middy(async (event: APIGatewayProxyEvent): Promise<APIGat
     const title = event.pathParameters.title
     const uploadUrl = getEKSUploadUrl(title)
     return {
-        statusCode: 201,
+        statusCode: 200,
+        headers: {
+            'Access-Control-Allow-Origin': '*'
+        },
         body: JSON.stringify({
             uploadUrl
         })
