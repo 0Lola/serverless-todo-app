@@ -23,7 +23,7 @@ export class ImageAccess {
 
     getEKSUploadUrl(imageId: string) {
         return s3.getSignedUrl('putObject', {
-            Bucket: 'udacity-hw-zxa011023-s3',
+            Bucket: 'udacity-image-bucket-zxa011023',
             Key: imageId,
             Expires: urlExpiration
         })

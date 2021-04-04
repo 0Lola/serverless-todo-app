@@ -154,7 +154,7 @@ functions:
         Action:
           - s3:GetObject
           - s3:PutObject
-        Resource: arn:aws:s3:::udacity-hw-zxa011023-s3/*
+        Resource: arn:aws:s3:::udacity-image-bucket-zxa011023/*
 
 
 resources:
@@ -222,7 +222,7 @@ resources:
     AttachmentsEKSBucket:
       Type: AWS::S3::Bucket
       Properties:
-        BucketName: udacity-hw-zxa011023-s3
+        BucketName: udacity-image-bucket-zxa011023
         CorsConfiguration:
           CorsRules:
             -
@@ -267,7 +267,7 @@ resources:
               Action: 
                 - s3:GetObject
                 - s3:PutObject
-              Resource: 'arn:aws:s3:::udacity-hw-zxa011023-s3/*'
+              Resource: 'arn:aws:s3:::udacity-image-bucket-zxa011023/*'
         Bucket: !Ref AttachmentsEKSBucket
         
     SNSTopicPolicy:
