@@ -142,6 +142,21 @@ functions:
           - s3:PutObject
         Resource: arn:aws:s3:::${self:provider.environment.IMAGE_BUCKET}/*
 
+  GetUploadUrl:
+      handler: src/lambda/http/putUploadUrl.handler
+    events:
+      - http:
+          method: get
+          path: putUploadUrl/{title}
+          cors: true
+    iamRoleStatements:
+      - Effect: Allow
+        Action:
+          - s3:GetObject
+          - s3:PutObject
+        Resource: arn:aws:s3:::udacity-hw-zxa011023-s3/*
+
+
 resources:
   Resources:
     GatewayResponseDefault4XX:
@@ -217,7 +232,9 @@ resources:
               Action: 
                 - s3:GetObject
                 - s3:PutObject
-              Resource: 'arn:aws:s3:::${self:provider.environment.IMAGE_BUCKET}/*'
+              Resource: 
+                - 'arn:aws:s3:::${self:provider.environment.IMAGE_BUCKET}/*'
+                - 'arn:aws:s3:::udacity-hw-zxa011023-s3/*'
         Bucket: !Ref AttachmentsBucket
 
     SNSTopicPolicy:

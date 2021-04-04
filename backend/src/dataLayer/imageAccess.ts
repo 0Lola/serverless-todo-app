@@ -21,4 +21,12 @@ export class ImageAccess {
         })
     }
 
+    getEKSUploadUrl(imageId: string) {
+        return s3.getSignedUrl('putObject', {
+            Bucket: 'udacity-hw-zxa011023-s3',
+            Key: imageId,
+            Expires: urlExpiration
+        })
+    }
+
 }
