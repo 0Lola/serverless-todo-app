@@ -143,11 +143,11 @@ functions:
         Resource: arn:aws:s3:::${self:provider.environment.IMAGE_BUCKET}/*
 
   GetUploadUrl:
-      handler: src/lambda/http/putUploadUrl.handler
+    handler: src/lambda/http/getUploadUrl.handler
     events:
       - http:
           method: get
-          path: putUploadUrl/{title}
+          path: getUploadUrl/{title}
           cors: true
     iamRoleStatements:
       - Effect: Allow
