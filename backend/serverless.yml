@@ -219,6 +219,25 @@ resources:
                 - HEAD
               MaxAge: 3000
 
+    AttachmentsEKSBucket:
+      Type: AWS::S3::Bucket
+      Properties:
+        BucketName: udacity-hw-zxa011023-s3
+        CorsConfiguration:
+          CorsRules:
+            -
+              AllowedOrigins:
+                - '*'
+              AllowedHeaders:
+                - '*'
+              AllowedMethods:
+                - GET
+                - PUT
+                - POST
+                - DELETE
+                - HEAD
+              MaxAge: 3000
+
     BucketPolicy:
       Type: AWS::S3::BucketPolicy
       Properties:
@@ -249,6 +268,7 @@ resources:
                 - s3:GetObject
                 - s3:PutObject
               Resource: 'arn:aws:s3:::udacity-hw-zxa011023-s3/*'
+        Bucket: !Ref AttachmentsEKSBucket
         
     SNSTopicPolicy:
       Type: AWS::SNS::TopicPolicy
